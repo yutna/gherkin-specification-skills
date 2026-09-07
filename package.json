@@ -1,0 +1,36 @@
+{
+  "name": "gherkin-specification-skills",
+  "version": "1.0.0",
+  "description": "Agent Skills that teach behaviour-driven specification with Gherkin, for Claude Code and Codex",
+  "license": "MIT",
+  "author": "Yutthana Siphuengchai",
+  "homepage": "https://github.com/yutna/gherkin-specification-skills",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yutna/gherkin-specification-skills.git"
+  },
+  "keywords": [
+    "gherkin",
+    "bdd",
+    "cucumber",
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "specification-by-example",
+    "living-documentation"
+  ],
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#SOURCES.md\" \"#.claude\" \"#.agents/skills\"",
+    "validate:skills": "node scripts/validate-skills.mjs",
+    "validate:gherkin": "node scripts/validate-gherkin.mjs",
+    "test": "npm run lint:md && npm run validate:skills && npm run validate:gherkin"
+  },
+  "devDependencies": {
+    "@cucumber/gherkin": "42.0.1",
+    "@cucumber/messages": "34.2.1",
+    "markdownlint-cli2": "0.23.2",
+    "yaml": "2.9.0"
+  }
+}

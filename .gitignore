@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Local research notes — never published
+SOURCES.md
+
+# Generated skill link directories (created by scripts)
+.claude/skills/
+.agents/skills/
+
+# OS / editor cruft
+.DS_Store
+*.swp

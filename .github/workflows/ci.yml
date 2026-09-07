@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint Markdown with default rules
+        run: npm run lint:md
+
+      - name: Reject markdownlint configuration
+        run: |
+          if git ls-files | grep -E '(^|/)\.markdownlint'; then
+            echo "A markdownlint config file is tracked; default rules only."
+            exit 1
+          fi
+          if git grep -n -- '<!-- *markdownlint-' -- '*.md'; then
+            echo "An inline markdownlint suppression was found."
+            exit 1
+          fi
+          echo "No markdownlint configuration or suppression found."
+
+      - name: Validate skill frontmatter
+        run: npm run validate:skills
+
+      - name: Parse every Gherkin example
+        run: npm run validate:gherkin
+
+      - name: Confirm research notes are untracked
+        run: |
+          if git ls-files --error-unmatch SOURCES.md 2>/dev/null; then
+            echo "SOURCES.md must never be committed."
+            exit 1
+          fi
+          git check-ignore -q SOURCES.md
+          echo "SOURCES.md is gitignored and untracked."

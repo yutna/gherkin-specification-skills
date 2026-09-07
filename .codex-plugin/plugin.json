@@ -1,0 +1,39 @@
+{
+  "name": "gherkin-specification-skills",
+  "version": "1.0.0",
+  "description": "Agent Skills for behaviour-driven specification with Gherkin: discovering examples, writing scenarios, reviewing feature files, automating steps, and designing a suite",
+  "author": {
+    "name": "Yutthana Siphuengchai",
+    "url": "https://github.com/yutna"
+  },
+  "homepage": "https://github.com/yutna/gherkin-specification-skills",
+  "repository": "https://github.com/yutna/gherkin-specification-skills",
+  "license": "MIT",
+  "keywords": [
+    "gherkin",
+    "bdd",
+    "cucumber",
+    "specification",
+    "acceptance-criteria",
+    "living-documentation",
+    "testing"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Gherkin Specification Skills",
+    "shortDescription": "Write, review, and automate Gherkin specifications",
+    "longDescription": "Turn requirements into agreed examples, phrase them as readable Gherkin, review feature files against a smell catalogue, implement thin step definitions, and design a suite that stays trusted.",
+    "developerName": "Yutthana Siphuengchai",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Turn these acceptance criteria into a feature file.",
+      "Review the Gherkin in this pull request."
+    ],
+    "websiteURL": "https://github.com/yutna/gherkin-specification-skills"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "gherkin-specification-skills",
+  "description": "Gherkin and behaviour-driven specification skills",
+  "owner": {
+    "name": "Yutthana Siphuengchai",
+    "url": "https://github.com/yutna"
+  },
+  "plugins": [
+    {
+      "name": "gherkin-specification-skills",
+      "description": "Discover examples, write and review Gherkin, automate steps, and design a specification suite",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Yutthana Siphuengchai"
+      },
+      "homepage": "https://github.com/yutna/gherkin-specification-skills",
+      "repository": "https://github.com/yutna/gherkin-specification-skills",
+      "license": "MIT",
+      "category": "development",
+      "keywords": [
+        "gherkin",
+        "bdd",
+        "cucumber",
+        "testing"
+      ]
+    }
+  ]
+}

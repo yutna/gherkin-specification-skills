@@ -1,0 +1,52 @@
+name: Problem with a skill
+description: A skill gave wrong guidance, or did not trigger when it should have
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        A concrete transcript is worth far more than a general report.
+        Most problems turn out to be triggering problems rather than
+        content problems.
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill
+      options:
+        - gherkin-discovery
+        - gherkin-scenario-writing
+        - gherkin-scenario-review
+        - gherkin-automation
+        - gherkin-suite-design
+        - Not sure / none triggered
+    validations:
+      required: true
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: Where you ran it
+      options:
+        - Claude Code
+        - Codex
+        - Another agent
+    validations:
+      required: true
+  - type: textarea
+    id: asked
+    attributes:
+      label: What you asked
+      description: The prompt, as close to verbatim as you can manage.
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What the agent produced
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
