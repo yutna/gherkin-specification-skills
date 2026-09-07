@@ -63,9 +63,19 @@ run() {
   fi
 }
 
-# --claude-only still needs a real directory to link to, so the copy target
-# stays ~/.agents/skills in every mode.
-copy_target="$AGENTS_DIR"
+# The default copies once into the shared directory and links Claude Code at
+# it. With --claude-only the shared directory is not wanted at all, so the
+# copy goes straight into ~/.claude/skills and nothing is linked.
+if [ "$install_agents" -eq 1 ]; then
+  copy_target="$AGENTS_DIR"
+  link_target="$CLAUDE_DIR"
+else
+  copy_target="$CLAUDE_DIR"
+  link_target=""
+fi
+if [ "$install_claude" -eq 0 ]; then
+  link_target=""
+fi
 
 installed=0
 skipped=0
@@ -75,25 +85,22 @@ for src in "$SKILLS_SRC"/*/; do
   name="$(basename "$src")"
   dest="${copy_target}/${name}"
 
-  if [ -e "$dest" ] && [ "$force" -eq 0 ]; then
+  if { [ -e "$dest" ] || [ -L "$dest" ]; } && [ "$force" -eq 0 ]; then
     printf 'skip   %s (already installed; use --force to replace)\n' "$name"
     skipped=$((skipped + 1))
     continue
   fi
 
   run mkdir -p "$copy_target"
-  if [ -e "$dest" ]; then
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
     run rm -rf "$dest"
   fi
   run cp -R "$src" "$dest"
+  printf 'copied %s -> %s\n' "$name" "$dest"
 
-  if [ "$install_agents" -eq 1 ]; then
-    printf 'copied %s -> %s\n' "$name" "$dest"
-  fi
-
-  if [ "$install_claude" -eq 1 ]; then
-    link="${CLAUDE_DIR}/${name}"
-    run mkdir -p "$CLAUDE_DIR"
+  if [ -n "$link_target" ]; then
+    link="${link_target}/${name}"
+    run mkdir -p "$link_target"
     if [ -e "$link" ] || [ -L "$link" ]; then
       run rm -rf "$link"
     fi
