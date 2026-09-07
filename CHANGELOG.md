@@ -10,7 +10,13 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
-- Nothing yet.
+- Fixed: `install.sh --claude-only` no longer writes into
+  `~/.agents/skills`; it copies straight into `~/.claude/skills` and
+  creates no symlink.
+- Added: `SECURITY.md`, stating what is in scope and how to report a
+  vulnerability privately.
+- Added: `.gitattributes`, normalising line endings and keeping the shell
+  and Node scripts checked out with LF on every platform.
 
 ## 1.0.0
 

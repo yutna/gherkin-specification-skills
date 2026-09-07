@@ -84,12 +84,14 @@ The default rules bite in specific ways. The ones that catch people out:
 ## Adding a skill
 
 1. Create `skills/<name>/SKILL.md` with the frontmatter above.
-1. Add the directory to the `skills` array in
-   `.claude-plugin/marketplace.json`.
 1. Run `npm test`.
 1. Check the description does not overlap an existing skill's triggers.
    Two skills that could both claim a task means neither will be chosen
    reliably.
+
+The manifests need no change. `.claude-plugin/plugin.json` and
+`.codex-plugin/plugin.json` both declare `"skills": "./skills/"`, so a
+new directory is discovered without being listed anywhere.
 
 ## Working locally
 

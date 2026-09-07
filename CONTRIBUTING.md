@@ -93,9 +93,10 @@ that could both claim a task means neither gets chosen reliably.
 If it is accepted:
 
 1. Create `skills/<name>/SKILL.md`.
-1. Add the directory to the `skills` array in
-   `.claude-plugin/marketplace.json`.
 1. Run `npm test`.
+
+No manifest edit is needed. Both plugin manifests declare
+`"skills": "./skills/"`, so a new directory is picked up automatically.
 
 ## Pull requests
 
@@ -117,3 +118,8 @@ problems.
 ## Code of conduct
 
 Participation is governed by `CODE_OF_CONDUCT.md`.
+
+## Security
+
+Do not report a suspected vulnerability as a public issue. `SECURITY.md`
+describes what is in scope and how to report it privately.
