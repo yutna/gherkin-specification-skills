@@ -141,8 +141,10 @@ Hooks run in definition order, and `After` hooks run in reverse, so the
 nesting works out. Tagged hooks take a tag expression, so
 `Before('@browser and not @mobile')` is valid.
 
-`AfterConfiguration` and `at_exit` handle once-per-run work. Anything
-placed there must tolerate being run once per process when the suite is
+`BeforeAll` and `AfterAll` handle once-per-run work, and `InstallPlugin`
+covers anything that needs the configuration itself. `AfterConfiguration`
+did this job until cucumber-ruby 8.0, which removed it. Anything placed in
+these must tolerate being run once per process when the suite is
 sharded.
 
 ## Data tables and doc strings
@@ -195,8 +197,8 @@ green.
 ## Parallel runs
 
 There is no built-in parallel runner. Teams shard by feature file across
-processes, usually with a helper gem, and give each process its own
-database and its own port.
+processes, usually with the `parallel_tests` gem, and give each process
+its own database and its own port.
 
 The prerequisites are the ordinary ones: no class variables or constants
 holding state, identifiers unique across processes, and per-process

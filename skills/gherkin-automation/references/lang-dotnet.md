@@ -19,14 +19,26 @@ scenario-scoped container do most of the work.
 
 ## Runners
 
-The long-established .NET runner generates test-framework tests from
-feature files at build time and is driven by a test project targeting
-NUnit, xUnit, or MSTest. Its actively maintained successor is a drop-in
-continuation of the same model, with the same attributes and the same
-container, so everything below applies to both.
+**Reqnroll** is the maintained runner and what new work should use. It
+generates test-framework tests from feature files at build time, driven
+by a test project targeting NUnit, xUnit, or MSTest. Its packages are
+named `Reqnroll.*`, its namespace is `Reqnroll`, and it is configured
+with `reqnroll.json`.
 
-If an existing suite uses the older package, migration is mostly a package
-swap and a namespace rename. New work should start on the maintained one.
+**SpecFlow** is its predecessor and is no longer maintained. Packages
+are named `SpecFlow.*`, the namespace is `TechTalk.SpecFlow`, and the
+configuration file is `specflow.json`.
+
+Reqnroll is a continuation of the same model, so the binding attributes,
+the scenario container, and the hook model below apply to both. Migration
+is mostly a package swap plus renaming the namespace from
+`TechTalk.SpecFlow` to `Reqnroll`; Reqnroll also still reads a
+`specflow.json` left in place.
+
+Two differences matter for the examples below, and both are called out
+where they appear: `DataTable` is a Reqnroll alias that SpecFlow does not
+have, and Cucumber Expression support arrived later in SpecFlow's life
+than in Reqnroll's.
 
 ## Project shape
 
@@ -87,10 +99,11 @@ public class LendingSteps
 The `[Binding]` attribute is what makes a class discoverable. A step class
 without it is silently ignored and every step in it reports as undefined.
 
-Cucumber Expressions and regular expressions are both accepted. The runner
-decides which by inspecting the pattern, so a pattern containing regular
-expression metacharacters is treated as a regular expression even when an
-expression was intended. Keep patterns unambiguous.
+Cucumber Expressions and regular expressions are both accepted by
+Reqnroll, and by SpecFlow from 3.9 onward. The runner decides which by
+inspecting the pattern, so a pattern containing regular expression
+metacharacters is treated as a regular expression even when an expression
+was intended. Keep patterns unambiguous.
 
 ## Sharing state by injection
 
@@ -178,6 +191,10 @@ public void GivenCatalogue(DataTable table)
 }
 ```
 
+`DataTable` is Reqnroll's alias for the older `Table` class, added to
+match Gherkin's own term. On SpecFlow the parameter type is `Table`;
+Reqnroll accepts either.
+
 The assist helpers do most of the conversion work: `CreateSet<T>` for a
 list, `CreateInstance<T>` for a vertical table, and comparison helpers for
 asserting a table against a collection.
@@ -212,14 +229,11 @@ parallelism almost always come from the glue or the application.
 
 ## Living documentation
 
-The ecosystem has strong tooling for turning executed scenarios into a
-browsable specification, including coverage of which rules have scenarios
-and which do not. It reads the same feature files plus the run results, so
-it costs nothing beyond wiring it into the build.
-
-Publishing that output somewhere non-engineers can reach it is the step
-most teams skip, and it is where most of the value of writing scenarios in
-business language actually arrives.
+LivingDoc turns executed scenarios into a browsable specification,
+including coverage of which rules have scenarios and which do not. It
+reads the same feature files plus the run results, so it costs nothing
+beyond wiring it into the build. Where to publish the output, and how to
+keep it read, belongs to the `gherkin-suite-design` skill.
 
 ## Pitfalls
 
