@@ -5,9 +5,9 @@ specification properly: find the examples, phrase them as readable
 Gherkin, review what already exists, implement thin step definitions, and
 keep a suite people trust.
 
-Written to the Agent Skills open standard, and built for Claude Code:
-install them as a plugin, or drop the directories into `~/.claude/skills`
-and start a session.
+Written as Agent Skills — a directory and a `SKILL.md` each — and built
+for Claude Code: install them as a plugin, or drop the directories into
+`~/.claude/skills` and start a session.
 
 ## The five skills
 
@@ -68,9 +68,20 @@ explicitly, name it:
 Use gherkin-discovery on this ticket before we estimate it.
 ```
 
-Typical sequence for new work: discovery to find the examples, then
-scenario-writing to phrase them, then automation to implement the steps.
-Review and suite-design apply to work that already exists.
+They are also in the slash menu, each showing what it expects. Installed
+by hand or by the script, a skill is its own command:
+
+```text
+/gherkin-scenario-review src/test/features
+```
+
+Installed as a plugin, the command carries the plugin name:
+`/gherkin-specification-skills:gherkin-scenario-review`.
+
+Typical sequence for new work: `gherkin-discovery` to find the examples,
+then `gherkin-scenario-writing` to phrase them, then `gherkin-automation`
+to implement the steps. `gherkin-scenario-review` and
+`gherkin-suite-design` apply to work that already exists.
 
 ## Working on this repository
 

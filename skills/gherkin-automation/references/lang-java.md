@@ -1,7 +1,7 @@
 # Java and the JVM
 
-Notes for running Gherkin on the JVM, where dependency injection does most
-of the work that other ecosystems do by hand.
+Notes for running Gherkin on the JVM with cucumber-jvm, where dependency
+injection does most of the work that other ecosystems do by hand.
 
 ## Contents
 
@@ -19,8 +19,9 @@ of the work that other ecosystems do by hand.
 
 ## Runner setup
 
-The modern approach runs feature files through the JUnit Platform's own
-test engine, discovered like any other test, with configuration in
+The modern approach runs feature files through
+`cucumber-junit-platform-engine`, discovered like any other test on the
+JUnit Platform, with configuration in
 `src/test/resources/junit-platform.properties` rather than annotations on
 a runner class. The filename matters: the engine reads its settings only
 from that file.
@@ -115,7 +116,7 @@ public class ScenarioContext {
 }
 ```
 
-With the picocontainer module on the classpath, any class appearing in a
+With `cucumber-picocontainer` on the classpath, any class appearing in a
 glue constructor is created once per scenario and shared among the glue
 classes for that scenario. That is the whole mechanism, and it is enough
 for most suites.
@@ -202,7 +203,7 @@ A doc string arrives as a `String` parameter, or as a converted type with
 
 ## Spring integration
 
-Add the Spring module and annotate one glue class with
+Add `cucumber-spring` and annotate one glue class with
 `@CucumberContextConfiguration`. Exactly one, or startup fails.
 
 ```java
