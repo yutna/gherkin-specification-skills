@@ -10,7 +10,7 @@ This project adheres to semantic versioning.
 
 ## 2.0.0
 
-Not yet released. Set the date when this is tagged.
+Released 2026-09-18.
 
 This release drops Codex support. Skills installed under
 `~/.agents/skills` keep working, because nothing about the files
