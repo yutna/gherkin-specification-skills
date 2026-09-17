@@ -4,9 +4,8 @@ node_modules/
 # Local research notes — never published
 SOURCES.md
 
-# Generated skill link directories (created by scripts)
+# Generated skill link directory (created by scripts/link-local.sh)
 .claude/skills/
-.agents/skills/
 
 # OS / editor cruft
 .DS_Store

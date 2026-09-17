@@ -14,8 +14,8 @@ current guidance got wrong.
 - [ ] `npm test` passes locally.
 - [ ] No `markdownlint` configuration file or inline suppression comment
       was added.
-- [ ] Frontmatter stays within `name`, `description`, `license`,
-      `compatibility`, `metadata`, and `allowed-tools`.
+- [ ] Frontmatter stays within the set the validator accepts.
+- [ ] `metadata.version` matches `package.json`.
 - [ ] No book titles, author names, or citations were added.
 - [ ] Any new `gherkin` example parses.
 - [ ] For a new skill, its triggers do not overlap an existing skill's.

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "gherkin-specification-skills",
   "description": "Gherkin and behaviour-driven specification skills",
   "owner": {

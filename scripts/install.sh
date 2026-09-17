@@ -1,24 +1,19 @@
 #!/usr/bin/env bash
 #
-# Installs the skills for use by any agent on this machine.
+# Installs the skills into ~/.claude/skills, where Claude Code discovers
+# personal skills in every project.
 #
-# Skills are copied into ~/.agents/skills/<name>, the shared location that
-# Codex and several other agents discover, and ~/.claude/skills/<name> is
-# linked to point at them. Both runtimes then read the same files.
-#
-# This script deliberately does not touch ~/.agents/.skill-lock.json; that
-# file belongs to a separate installer.
+# Each skills/<name> directory is copied whole, so the installed copy is
+# independent of this checkout. To work on the skills instead, use
+# scripts/link-local.sh, which links them into the repository itself.
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILLS_SRC="${REPO_ROOT}/skills"
 
-AGENTS_DIR="${HOME}/.agents/skills"
 CLAUDE_DIR="${HOME}/.claude/skills"
 
-install_agents=1
-install_claude=1
 dry_run=0
 force=0
 
@@ -26,22 +21,17 @@ usage() {
   cat <<'USAGE'
 Usage: scripts/install.sh [options]
 
+Copies every skills/<name> directory into ~/.claude/skills.
+
 Options:
-  --claude-only   Install into ~/.claude/skills only
-  --codex-only    Install into ~/.agents/skills only
   --force         Overwrite skills that are already installed
   --dry-run       Print what would happen and change nothing
   -h, --help      Show this message
-
-With no options, skills are copied into ~/.agents/skills and linked from
-~/.claude/skills, so both Claude Code and Codex read the same files.
 USAGE
 }
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --claude-only) install_agents=0 ;;
-    --codex-only)  install_claude=0 ;;
     --force)       force=1 ;;
     --dry-run)     dry_run=1 ;;
     -h|--help)     usage; exit 0 ;;
@@ -63,27 +53,13 @@ run() {
   fi
 }
 
-# The default copies once into the shared directory and links Claude Code at
-# it. With --claude-only the shared directory is not wanted at all, so the
-# copy goes straight into ~/.claude/skills and nothing is linked.
-if [ "$install_agents" -eq 1 ]; then
-  copy_target="$AGENTS_DIR"
-  link_target="$CLAUDE_DIR"
-else
-  copy_target="$CLAUDE_DIR"
-  link_target=""
-fi
-if [ "$install_claude" -eq 0 ]; then
-  link_target=""
-fi
-
 installed=0
 skipped=0
 
 for src in "$SKILLS_SRC"/*/; do
   [ -d "$src" ] || continue
   name="$(basename "$src")"
-  dest="${copy_target}/${name}"
+  dest="${CLAUDE_DIR}/${name}"
 
   if { [ -e "$dest" ] || [ -L "$dest" ]; } && [ "$force" -eq 0 ]; then
     printf 'skip   %s (already installed; use --force to replace)\n' "$name"
@@ -91,22 +67,12 @@ for src in "$SKILLS_SRC"/*/; do
     continue
   fi
 
-  run mkdir -p "$copy_target"
+  run mkdir -p "$CLAUDE_DIR"
   if [ -e "$dest" ] || [ -L "$dest" ]; then
     run rm -rf "$dest"
   fi
   run cp -R "$src" "$dest"
   printf 'copied %s -> %s\n' "$name" "$dest"
-
-  if [ -n "$link_target" ]; then
-    link="${link_target}/${name}"
-    run mkdir -p "$link_target"
-    if [ -e "$link" ] || [ -L "$link" ]; then
-      run rm -rf "$link"
-    fi
-    run ln -s "$dest" "$link"
-    printf 'linked %s -> %s\n' "$name" "$link"
-  fi
 
   installed=$((installed + 1))
 done

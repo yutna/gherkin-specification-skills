@@ -1,28 +1,53 @@
 #!/usr/bin/env node
-// Validates every skills/<name>/SKILL.md against the portable Agent Skills
-// frontmatter subset, so the same file works in Claude Code and Codex.
+// Validates every skills/<name>/SKILL.md against the frontmatter Claude Code
+// accepts, and checks that the version recorded in each skill matches the one
+// in package.json.
 
 import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { join, dirname, basename } from 'node:path'
+import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parse as parseYaml } from 'yaml'
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)))
 const SKILLS_DIR = join(ROOT, 'skills')
 
-// Keys accepted by every runtime that implements the open standard. Anything
-// else is a hard validation error outside Claude Code, so it is banned here.
+// Every frontmatter key Claude Code documents. A key outside this set is
+// either a typo or a feature this runtime does not have, and both are worth
+// failing on rather than silently ignoring.
 const ALLOWED_KEYS = new Set([
   'name',
   'description',
+  'when_to_use',
+  'argument-hint',
+  'arguments',
+  'disable-model-invocation',
+  'user-invocable',
+  'allowed-tools',
+  'disallowed-tools',
+  'model',
+  'effort',
+  'context',
+  'agent',
+  'background',
+  'hooks',
+  'paths',
+  'shell',
+  'metadata',
   'license',
   'compatibility',
-  'metadata',
-  'allowed-tools',
 ])
 
+// Claude Code truncates description and when_to_use together at this length.
+const DESCRIPTION_LIMIT = 1536
+const COMPATIBILITY_LIMIT = 500
+
 const NAME_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
-const RESERVED_WORDS = ['anthropic', 'claude']
+// Claude Code reserves this exact directory name for claude.ai synced skills
+// and skips anything using it.
+const RESERVED_NAME = 'synced'
+// Not a Claude Code rule, but the Agent Skills registry rejects these, so a
+// name containing one could never be published there.
+const RESERVED_SUBSTRINGS = ['anthropic', 'claude']
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/
 
 const errors = []
@@ -61,7 +86,10 @@ function validateName (id, frontmatter) {
   if (!NAME_PATTERN.test(name)) {
     fail(id, `"name" must be lowercase kebab-case, got "${name}"`)
   }
-  for (const word of RESERVED_WORDS) {
+  if (name.toLowerCase() === RESERVED_NAME) {
+    fail(id, `"name" must not be "${RESERVED_NAME}", which Claude Code reserves`)
+  }
+  for (const word of RESERVED_SUBSTRINGS) {
     if (name.includes(word)) {
       fail(id, `"name" must not contain the reserved word "${word}"`)
     }
@@ -69,13 +97,24 @@ function validateName (id, frontmatter) {
 }
 
 function validateDescription (id, frontmatter) {
-  const { description } = frontmatter
+  const { description, when_to_use: whenToUse } = frontmatter
   if (typeof description !== 'string' || description.trim().length === 0) {
     fail(id, 'frontmatter "description" is missing or empty')
     return
   }
-  if (description.length > 1024) {
-    fail(id, `"description" is ${description.length} characters, limit 1024`)
+  if (whenToUse !== undefined && typeof whenToUse !== 'string') {
+    fail(id, 'frontmatter "when_to_use" must be a string')
+    return
+  }
+  // The two are concatenated before Claude Code truncates them, so the pair
+  // is what has to fit, not either one alone.
+  const combined = description.length + (whenToUse?.length ?? 0)
+  if (combined > DESCRIPTION_LIMIT) {
+    fail(
+      id,
+      `"description" and "when_to_use" total ${combined} characters, ` +
+        `the limit is ${DESCRIPTION_LIMIT}`,
+    )
   }
   if (/[<>]/.test(description)) {
     fail(id, '"description" must not contain angle brackets')
@@ -88,11 +127,23 @@ function validateDescription (id, frontmatter) {
 function validateKeys (id, frontmatter) {
   for (const key of Object.keys(frontmatter)) {
     if (!ALLOWED_KEYS.has(key)) {
-      fail(id, `frontmatter key "${key}" is outside the portable subset`)
+      fail(id, `frontmatter key "${key}" is not one Claude Code accepts`)
     }
   }
   if (frontmatter.license !== 'MIT') {
     fail(id, 'frontmatter "license" must be "MIT"')
+  }
+  const { compatibility } = frontmatter
+  if (compatibility !== undefined) {
+    if (typeof compatibility !== 'string') {
+      fail(id, 'frontmatter "compatibility" must be a string')
+    } else if (compatibility.length > COMPATIBILITY_LIMIT) {
+      fail(
+        id,
+        `"compatibility" is ${compatibility.length} characters, ` +
+          `the limit is ${COMPATIBILITY_LIMIT}`,
+      )
+    }
   }
 }
 
@@ -188,8 +239,52 @@ function validateSkill (id) {
   validateName(id, frontmatter)
   validateDescription(id, frontmatter)
   validateKeys(id, frontmatter)
+  validateVersion(id, frontmatter)
   validateBody(id, match[2])
   validateReferences(id, dir, match[2])
+}
+
+function readJson (relative) {
+  return JSON.parse(readFileSync(join(ROOT, relative), 'utf8'))
+}
+
+const EXPECTED_VERSION = readJson('package.json').version
+
+// The version is recorded in eight places. Nothing in the packaging tooling
+// keeps them in step, so a release that updates seven of them ships a skill
+// claiming to be the previous one.
+function validateVersion (id, frontmatter) {
+  const version = frontmatter.metadata?.version
+  if (version === undefined) {
+    fail(id, 'frontmatter "metadata.version" is missing')
+    return
+  }
+  if (version !== EXPECTED_VERSION) {
+    fail(
+      id,
+      `"metadata.version" is "${version}" but package.json is ` +
+        `"${EXPECTED_VERSION}"`,
+    )
+  }
+}
+
+function validateManifestVersions () {
+  const plugin = readJson('.claude-plugin/plugin.json')
+  if (plugin.version !== EXPECTED_VERSION) {
+    errors.push(
+      `.claude-plugin/plugin.json: "version" is "${plugin.version}" but ` +
+        `package.json is "${EXPECTED_VERSION}"`,
+    )
+  }
+  const marketplace = readJson('.claude-plugin/marketplace.json')
+  for (const entry of marketplace.plugins ?? []) {
+    if (entry.version !== undefined && entry.version !== EXPECTED_VERSION) {
+      errors.push(
+        `.claude-plugin/marketplace.json: "${entry.name}" is at ` +
+          `"${entry.version}" but package.json is "${EXPECTED_VERSION}"`,
+      )
+    }
+  }
 }
 
 function validateDistinctDescriptions (ids) {
@@ -213,6 +308,7 @@ if (skillIds.length === 0 && errors.length === 0) {
 for (const id of skillIds) {
   validateSkill(id)
 }
+validateManifestVersions()
 if (errors.length === 0) {
   validateDistinctDescriptions(skillIds)
 }
@@ -229,5 +325,6 @@ if (errors.length > 0) {
   process.exit(1)
 }
 process.stdout.write(
-  `ok    ${skillIds.length} skill(s) valid: ${skillIds.join(', ')}\n`,
+  `ok    ${skillIds.length} skill(s) valid at ${EXPECTED_VERSION}: ` +
+    `${skillIds.join(', ')}\n`,
 )
