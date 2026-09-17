@@ -1,7 +1,7 @@
 ---
 name: gherkin-automation
 description: Implement and repair the code behind Gherkin steps. Use when writing or refactoring step definitions, wiring glue code to an application, sharing state between steps, building test data, adding hooks, diagnosing why an individual scenario is flaky or slow, resolving undefined or ambiguous step errors, or deciding what belongs in a scenario versus a unit test. Covers Cucumber Expressions, parameter types, the layering rule, isolation, determinism, and per-language notes for JavaScript, Java, Python, .NET, Go, and Ruby.
-argument-hint: [step, glue file, or failing scenario]
+argument-hint: "[step, glue file, or failing scenario]"
 license: MIT
 metadata:
   version: "2.0.0"

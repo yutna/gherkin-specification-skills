@@ -37,8 +37,8 @@ is mostly a package swap plus renaming the namespace from
 
 Two differences matter for the examples below, and both are called out
 where they appear: `DataTable` is a Reqnroll alias that SpecFlow does not
-have, and Cucumber Expression support arrived later in SpecFlow's life
-than in Reqnroll's.
+have, and Cucumber Expressions are native to Reqnroll but reached
+SpecFlow only in 4.0.
 
 ## Project shape
 
@@ -100,7 +100,8 @@ The `[Binding]` attribute is what makes a class discoverable. A step class
 without it is silently ignored and every step in it reports as undefined.
 
 Cucumber Expressions and regular expressions are both accepted by
-Reqnroll, and by SpecFlow from 3.9 onward. The runner decides which by
+Reqnroll. SpecFlow gained Cucumber Expressions natively only in 4.0;
+on 3.x they need a separate plugin package. The runner decides which by
 inspecting the pattern, so a pattern containing regular expression
 metacharacters is treated as a regular expression even when an expression
 was intended. Keep patterns unambiguous.

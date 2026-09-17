@@ -1,7 +1,7 @@
 ---
 name: gherkin-suite-design
 description: Shape a whole body of feature files rather than one scenario. Use when setting up a BDD suite from scratch, deciding how to organise or split feature files, designing a tagging strategy, publishing scenarios as living documentation, deciding what runs in continuous integration and when, or introducing BDD into a codebase that already has tests. Concerns the shape of the whole suite, not the code behind any one step. Covers folder layout, feature granularity, tag taxonomy, suite health metrics, migration, and failure triage.
-argument-hint: [path to the feature suite]
+argument-hint: "[path to the feature suite]"
 license: MIT
 metadata:
   version: "2.0.0"

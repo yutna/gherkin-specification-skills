@@ -1,7 +1,7 @@
 ---
 name: gherkin-scenario-writing
 description: Write Gherkin feature files and scenarios that read as behaviour rather than test scripts. Use when drafting or rewriting a .feature file, turning acceptance criteria or a user story into Given/When/Then, naming scenarios, choosing between a Scenario and a Scenario Outline, deciding whether a Background is justified, or when asked what a scenario should say. Covers the full Gherkin keyword set, declarative phrasing, data tables, doc strings, tags, and localisation.
-argument-hint: [rules and examples, or a .feature file]
+argument-hint: "[rules and examples, or a .feature file]"
 license: MIT
 metadata:
   version: "2.0.0"
