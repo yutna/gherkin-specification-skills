@@ -5,11 +5,15 @@ anything in it.
 
 ## What is here
 
-`skills/<name>/SKILL.md` is the single source of truth for each skill.
-Every other file — the plugin manifests, the install script, this file —
+`plugin/skills/<name>/SKILL.md` is the single source of truth for each
+skill. Every other file — the manifests, the install script, this file —
 points at those directories. Nothing duplicates skill prose, and a change
 that would require editing the same sentence in two places is a sign the
 structure is wrong.
+
+Everything the plugin ships lives under `plugin/`. The repository's own
+tooling stays outside it, for the reason given under "Files you should
+not create".
 
 The five skills are `gherkin-discovery`, `gherkin-scenario-writing`,
 `gherkin-scenario-review`, `gherkin-automation`, and
@@ -89,13 +93,13 @@ The default rules bite in specific ways. The ones that catch people out:
 
 ## Adding a skill
 
-1. Create `skills/<name>/SKILL.md` with the frontmatter above.
+1. Create `plugin/skills/<name>/SKILL.md` with the frontmatter above.
 1. Run `npm test`.
 1. Check the description does not overlap an existing skill's triggers.
    Two skills that could both claim a task means neither will be chosen
    reliably.
 
-The manifest needs no change. `.claude-plugin/plugin.json` declares
+The manifest needs no change. `plugin/.claude-plugin/plugin.json` declares
 `"skills": "./skills/"`, so a new directory is discovered without being
 listed anywhere. The version in its frontmatter must match
 `package.json`; `npm test` fails if it does not.
@@ -106,13 +110,18 @@ listed anywhere. The version in its frontmatter must match
 ./scripts/link-local.sh
 ```
 
-This links `skills/` into `.claude/skills/` so an agent working in this
-repository can load them. That directory is gitignored. Remove the links
-with `./scripts/link-local.sh --remove`.
+This links `plugin/skills/` into `.claude/skills/` so an agent working in
+this repository can load them. That directory is gitignored. Remove the
+links with `./scripts/link-local.sh --remove`.
 
 ## Files you should not create
 
 - Any `markdownlint` configuration file.
 - A second copy of skill content in another format.
+- `plugin/package.json` or `plugin/package-lock.json`. A lock file at the
+  plugin's root makes `claude plugin install` run npm on the machine of
+  everyone who installs the plugin, pulling this repository's dev tooling
+  for no benefit. That is why `plugin/` exists at all. `npm test` fails if
+  either file appears there.
 - `SOURCES.md` is gitignored by design. Do not commit it, and do not add
   its contents to any tracked file.

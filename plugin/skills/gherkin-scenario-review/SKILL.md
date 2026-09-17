@@ -4,7 +4,7 @@ description: Critique and repair feature files that already exist. Use when revi
 argument-hint: "[.feature files, a path, or a pull request]"
 license: MIT
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   author: yutna
 ---
 

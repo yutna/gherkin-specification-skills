@@ -1,6 +1,6 @@
 {
   "name": "gherkin-specification-skills",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Agent Skills for behaviour-driven specification with Gherkin: discovering examples, writing scenarios, reviewing feature files, automating steps, and designing a suite",
   "author": {
     "name": "Yutthana Siphuengchai",

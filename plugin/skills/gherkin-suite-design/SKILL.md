@@ -4,7 +4,7 @@ description: Shape a whole body of feature files rather than one scenario. Use w
 argument-hint: "[path to the feature suite]"
 license: MIT
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   author: yutna
 ---
 
