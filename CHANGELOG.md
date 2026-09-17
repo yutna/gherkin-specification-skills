@@ -8,11 +8,46 @@ runs.
 
 This project adheres to semantic versioning.
 
-## Unreleased
+## 2.0.0
 
+Released 2026-09-18.
+
+This release drops Codex support. Skills installed under
+`~/.agents/skills` keep working, because nothing about the files
+themselves changed, but the repository no longer ships Codex manifests
+and the installer no longer writes to that directory.
+
+- Removed: Codex support. `.codex-plugin/` and `.agents/` are gone, and
+  `install.sh` lost `--claude-only` and `--codex-only` because there is
+  now one destination.
+- Changed: `install.sh` copies into `~/.claude/skills` and creates no
+  symlink; `link-local.sh` links only `.claude/skills`.
+- Changed: the frontmatter validator accepts the keys Claude Code
+  documents rather than a six-key portable subset, checks `description`
+  and `when_to_use` against the 1536-character budget they share, and
+  reserves the name `synced`.
+- Changed: the `interface` block moved from the Codex manifest into
+  `.claude-plugin/plugin.json`, where Claude Code plugin listings use it.
+- Fixed: project instructions moved from `AGENTS.md` to `CLAUDE.md`.
+  Claude Code does not read `AGENTS.md`, so none of the repository's
+  constraints had been reaching an agent working in it.
+- Fixed: six factual errors in the language reference files. `lang-dotnet`
+  named neither SpecFlow nor Reqnroll while telling the reader to migrate
+  between them; `lang-java` referenced a non-existent
+  `DataTableEntryDefinition` and never named
+  `junit-platform.properties`; `lang-python` claimed step modules need a
+  `test_` prefix; `lang-ruby` recommended `AfterConfiguration`, removed
+  in cucumber-ruby 8.0; `lang-javascript` typed the World in a way the
+  documentation does not use.
+- Fixed: the smell headings in `gherkin-scenario-review` now match
+  `smell-catalogue.md`, so a smell leads to its rewrite. None of the
+  fifteen matched before.
 - Fixed: `install.sh --claude-only` no longer writes into
-  `~/.agents/skills`; it copies straight into `~/.claude/skills` and
-  creates no symlink.
+  `~/.agents/skills`; superseded by the removal above.
+- Added: `argument-hint` on every skill, so each shows what it expects in
+  the slash menu.
+- Added: a check that the version in `package.json`, both manifests, and
+  all five skills agree. Nothing previously compared them.
 - Added: `SECURITY.md`, stating what is in scope and how to report a
   vulnerability privately.
 - Added: `.gitattributes`, normalising line endings and keeping the shell

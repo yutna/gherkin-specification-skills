@@ -1,9 +1,10 @@
 ---
 name: gherkin-discovery
 description: Turn a vague story, ticket, or requirement into agreed concrete examples before any scenario is written. Use when acceptance criteria are missing or ambiguous, when a feature request is too abstract to build, when the team disagrees about scope, when nobody can say what "done" means, or when asked to find edge cases and open questions for a piece of work. Produces a set of business rules with worked examples and unanswered questions, ready to be phrased as Gherkin.
+argument-hint: [ticket, story, or requirement]
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   author: yutna
 ---
 
