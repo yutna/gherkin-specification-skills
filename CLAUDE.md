@@ -35,10 +35,11 @@ These are not preferences, and a change that breaks one will be rejected.
   configuration file, and inline suppression comments are forbidden.
   Adding either to make a file pass is not an acceptable fix; rewrite the
   content instead.
-- **Frontmatter stays inside the portable subset**: `name`,
-  `description`, `license`, `compatibility`, `metadata`, `allowed-tools`.
-  Any other key is a hard validation error outside Claude Code and would
-  break Codex compatibility.
+- **Frontmatter stays inside the set Claude Code documents.** The
+  validator lists them; the ones used here are `name`, `description`,
+  `license`, `metadata`, and `argument-hint`. A key outside the set is a
+  hard validation error, because it is either a typo or a feature this
+  runtime does not have.
 - **Skill content is English only.**
 - **No citations.** Do not add book titles, author names, publisher
   names, or bibliographic references to any tracked file.
@@ -89,9 +90,10 @@ The default rules bite in specific ways. The ones that catch people out:
    Two skills that could both claim a task means neither will be chosen
    reliably.
 
-The manifests need no change. `.claude-plugin/plugin.json` and
-`.codex-plugin/plugin.json` both declare `"skills": "./skills/"`, so a
-new directory is discovered without being listed anywhere.
+The manifest needs no change. `.claude-plugin/plugin.json` declares
+`"skills": "./skills/"`, so a new directory is discovered without being
+listed anywhere. The version in its frontmatter must match
+`package.json`; `npm test` fails if it does not.
 
 ## Working locally
 
@@ -99,9 +101,9 @@ new directory is discovered without being listed anywhere.
 ./scripts/link-local.sh
 ```
 
-This links `skills/` into `.claude/skills/` and `.agents/skills/` so an
-agent working in this repository can load them. Both directories are
-gitignored. Remove the links with `./scripts/link-local.sh --remove`.
+This links `skills/` into `.claude/skills/` so an agent working in this
+repository can load them. That directory is gitignored. Remove the links
+with `./scripts/link-local.sh --remove`.
 
 ## Files you should not create
 
