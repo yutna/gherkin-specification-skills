@@ -1,7 +1,7 @@
 # Ruby
 
-Notes for the original Cucumber implementation, where the conventions the
-rest of the ecosystem copied were first established.
+Notes for cucumber-ruby, the original Cucumber implementation, where the
+conventions the rest of the ecosystem copied were first established.
 
 ## Contents
 
