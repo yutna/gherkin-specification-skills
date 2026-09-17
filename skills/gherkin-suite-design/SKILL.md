@@ -28,9 +28,9 @@ This skill is about that level.
   when.
 - The whole run has become too slow or too distrusted to be useful.
 
-For phrasing one scenario, use the scenario-writing skill. For critiquing
-existing files, use the review skill. For the code behind the steps, use
-the automation skill.
+For phrasing one scenario, use `gherkin-scenario-writing`. For critiquing
+existing files, use `gherkin-scenario-review`. For the code behind the
+steps, use `gherkin-automation`.
 
 ## Organise by capability
 
@@ -202,8 +202,8 @@ Introducing this into a codebase that already has tests, without a rewrite:
    when there is real evidence of what is shared.
 
 Inherited feature files that nobody trusts are a separate problem. Triage
-them with the review skill rather than attempting to fix them all, and
-treat deleting a scenario nobody believes as progress.
+them with `gherkin-scenario-review` rather than attempting to fix them
+all, and treat deleting a scenario nobody believes as progress.
 
 ## Quick reference
 

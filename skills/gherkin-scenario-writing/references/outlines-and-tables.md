@@ -11,6 +11,7 @@ Three ways to attach data to a specification, and the failure mode of each.
 - [When an outline is the wrong answer](#when-an-outline-is-the-wrong-answer)
 - [Data tables on a step](#data-tables-on-a-step)
 - [Table escaping and empty values](#table-escaping-and-empty-values)
+- [When a table is the wrong answer](#when-a-table-is-the-wrong-answer)
 - [Vertical tables](#vertical-tables)
 - [Doc strings](#doc-strings)
 - [Named data over literal data](#named-data-over-literal-data)
@@ -185,6 +186,20 @@ Given the members are:
 
 Whichever sentinel is chosen, use the same one across the suite and
 document it once in the step definition layer.
+
+## When a table is the wrong answer
+
+A table is the wrong tool when the reader has to count columns to follow
+it. Past about five columns, ask whether several of them are really one
+named concept that the step could state instead.
+
+It is also wrong when only one row matters to the rule. A single-row table
+is a step with its arguments moved somewhere less readable; put the values
+in the step text.
+
+```gherkin
+Given Priya is a premium member at Sathorn
+```
 
 ## Vertical tables
 

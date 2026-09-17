@@ -28,9 +28,10 @@ This skill supplies the diagnosis and the repair for each recurring defect.
 - Feature files arrive from another team and need assessing.
 - A refactor of existing scenarios is requested.
 
-If the scenarios do not exist yet, write them with the scenario-writing
-skill instead. If the underlying rules were never agreed, no amount of
-rewriting will fix the file, and the work belongs in discovery.
+If the scenarios do not exist yet, write them with
+`gherkin-scenario-writing` instead. If the underlying rules were never
+agreed, no amount of rewriting will fix the file, and the work belongs in
+`gherkin-discovery`.
 
 ## How to review
 
@@ -53,10 +54,11 @@ each with a concrete rewrite.
 
 ## The smell catalogue
 
-Each entry gives the symptom, what it costs, and the repair. The full set,
-with longer worked rewrites, is in `references/smell-catalogue.md`.
+Each entry gives the symptom, what it costs, and the repair. The headings
+match `references/smell-catalogue.md`, which carries the same set with a
+full before-and-after rewrite for each.
 
-### Interface detail in the wording
+### Click-by-click narration
 
 - **Symptom:** steps name buttons, fields, selectors, URLs, or screens.
 - **Cost:** the specification breaks when the interface changes, and the
@@ -71,7 +73,7 @@ Scenario: Borrowing an available title records the loan
   Then the loan is recorded against her account
 ```
 
-### Conjunction steps
+### Steps joined by and
 
 - **Symptom:** a single step joining two actions with "and".
 - **Cost:** neither half can be reused, and a failure does not say which
@@ -79,7 +81,7 @@ Scenario: Borrowing an available title records the loan
 - **Repair:** split into separate steps, or collapse the first into a
   `Given` that names its result.
 
-### More than one When
+### Two actions under test
 
 - **Symptom:** two or more `When` steps in one scenario.
 - **Cost:** two behaviours are being tested at once, so a failure is
@@ -87,7 +89,7 @@ Scenario: Borrowing an available title records the loan
 - **Repair:** split the scenario, demoting the earlier action to a `Given`
   phrased as state.
 
-### Missing or vacuous Then
+### Assertions nobody can observe
 
 - **Symptom:** no `Then`, or one that asserts nothing a person could
   observe, such as "the record is saved".
@@ -95,13 +97,13 @@ Scenario: Borrowing an available title records the loan
 - **Repair:** state the consequence the requester cares about. If there is
   no observable consequence, the case belongs in a unit test.
 
-### Test identifiers as names
+### Names that identify tests
 
 - **Symptom:** names like `TC-114`, `Test 3`, or `Happy path`.
 - **Cost:** failure reports and the file index become useless.
 - **Repair:** name the behaviour as a disputable claim.
 
-### Bloated Background
+### Background as a dumping ground
 
 - **Symptom:** a `Background` of many steps, some needed by only a few
   scenarios.
@@ -110,28 +112,28 @@ Scenario: Borrowing an available title records the loan
 - **Repair:** keep only what every scenario needs and what a reader must
   know. Push the rest into the scenarios that use it, or split the feature.
 
-### Single-row outline
+### An outline with one row
 
 - **Symptom:** a `Scenario Outline` with one `Examples` row.
 - **Cost:** ceremony with no benefit; the reader hunts for a variation that
   does not exist.
 - **Repair:** write it as a plain `Scenario`.
 
-### Dead columns
+### Columns that carry nothing
 
 - **Symptom:** an `Examples` column with the same value in every row, or
   one that never affects the outcome.
 - **Cost:** the reader has to work out that it does not matter.
 - **Repair:** move the constant into the step text and delete the column.
 
-### Outline hiding several rules
+### Two rules in one table
 
 - **Symptom:** rows whose outcomes differ in kind, often with a `valid` or
   `expected result` column switching the assertion.
 - **Cost:** neither outcome can be stated plainly in the step text.
 - **Repair:** split into one scenario per outcome.
 
-### Order-dependent scenarios
+### Scenarios that need each other
 
 - **Symptom:** a scenario relying on state left behind by an earlier one.
 - **Cost:** the suite cannot run in parallel, cannot run a single scenario,
@@ -139,14 +141,14 @@ Scenario: Borrowing an available title records the loan
 - **Repair:** give each scenario its own `Given` steps, even if that
   repeats setup. Repetition in the specification is cheaper than coupling.
 
-### Leaked technical vocabulary
+### Schema words in the specification
 
 - **Symptom:** words from the schema or the code where the business uses
   different ones.
 - **Cost:** the file stops being readable by the people it was written for.
 - **Repair:** use the business word and let the step definition translate.
 
-### Unexplained values
+### Numbers with no meaning
 
 - **Symptom:** literal numbers or codes with no stated meaning.
 - **Cost:** the reader cannot tell what is significant, and the scenario
@@ -154,15 +156,15 @@ Scenario: Borrowing an available title records the loan
 - **Repair:** name the concept in the step and let the step definition
   produce whatever satisfies it.
 
-### Happy path only
+### Only success is described
 
 - **Symptom:** every scenario succeeds.
 - **Cost:** the rules are invisible, because a rule is only demonstrated by
   the case it refuses.
 - **Repair:** for each rule, add the case where it bites. If nobody can
-  say what that case is, the gap belongs in discovery.
+  say what that case is, the gap belongs in `gherkin-discovery`.
 
-### Tags as runner configuration
+### Tags carrying runner options
 
 - **Symptom:** tags encoding environments, browsers, or execution options.
 - **Cost:** the specification carries operational detail that changes for
@@ -170,13 +172,31 @@ Scenario: Borrowing an available title records the loan
 - **Repair:** keep tags descriptive and move execution choices into the
   runner configuration.
 
-### Duplicate scenarios
+### The same scenario twice
 
 - **Symptom:** two scenarios differing only in wording or in an irrelevant
   value.
 - **Cost:** both must be maintained, and a change to the rule will update
   one of them.
 - **Repair:** merge them, or make the difference explicit and meaningful.
+
+### Comments doing the step's job
+
+- **Symptom:** a comment above a step explaining what the step does.
+- **Cost:** the explanation is invisible in every report, and the step
+  stays badly worded.
+- **Repair:** move the meaning into the step text. A comment saying why a
+  rule exists is different and worth keeping.
+
+### A feature covering everything
+
+- **Symptom:** one file with thirty scenarios, a long `Background`, and a
+  name like Member management.
+- **Cost:** a boundary problem that no amount of rewriting individual
+  scenarios fixes.
+- **Repair:** split on the rules. Each cluster of related rules is a
+  candidate feature, and each rule needing several examples is a
+  candidate `Rule` block.
 
 ## The rubric
 

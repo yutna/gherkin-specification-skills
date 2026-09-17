@@ -124,8 +124,8 @@ most one per container.
 ## Scenario
 
 A scenario is a sequence of steps. There is no upper limit, but the useful
-range is roughly three to eight. Longer usually means several `Given` steps
-that should collapse into one summarising state.
+range is three to eight. Longer usually means several `Given` steps that
+should collapse into one summarising state.
 
 `Example` is an exact synonym and reads better inside a `Rule` block, where
 the word "scenario" competes with the surrounding prose.
@@ -183,19 +183,12 @@ Given the catalogue contains:
   | Kindred          | Phaya   | 1      |
 ```
 
-Rules that catch people out:
+Every row must have the same number of cells as the header, including
+the header itself; a missing trailing pipe is the usual cause of a
+confusing parse error.
 
-- Every row must have the same number of cells, including the header.
-- Surrounding whitespace in a cell is stripped.
-- `\|` escapes a literal pipe, `\\` a literal backslash, and `\n` a
-  newline inside a cell.
-- An empty cell is an empty string, not null. Runners differ on how to
-  express null; the portable choice is a sentinel word the step definition
-  interprets, such as `(none)`.
-
-A table is the wrong tool when the reader has to count columns to follow
-it. Past about five columns, consider whether several of them are really
-one named concept.
+Escaping, whitespace handling, empty cells, and when a table is the wrong
+tool are covered in `outlines-and-tables.md`.
 
 ## Doc strings
 
@@ -211,13 +204,10 @@ Then the response status is 201
 ```
 
 The word after the opening delimiter is a content type, available to the
-step definition and ignored by the parser. Indentation of the closing
-delimiter sets the left margin: everything is de-indented by that amount,
-so the block can sit visually inside the step without the leading spaces
-reaching the code.
+step definition and ignored by the parser.
 
-Use backticks as the delimiter when the content itself contains a run of
-double quotes.
+Indentation, the backtick delimiter, and when a doc string is the wrong
+tool are covered in `outlines-and-tables.md`.
 
 ## Tags
 
