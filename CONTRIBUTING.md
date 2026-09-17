@@ -42,6 +42,11 @@ either a typo or a feature this runtime does not have.
 repository and parses it. Fragments are wrapped automatically, so a few
 bare steps are fine, but anything that would not parse fails the build.
 
+Continuous integration installs with `npm ci`, which refuses to run when
+`package.json` and `package-lock.json` disagree. So a change to any
+dependency version has to be made by running `npm install`, not by
+editing `package.json` by hand.
+
 ## Linting rules that catch people out
 
 Run the linter while drafting rather than at the end. The rules that most

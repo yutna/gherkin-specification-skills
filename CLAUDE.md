@@ -27,6 +27,11 @@ parsing. All three must pass. Run them as you write, not once at the end;
 the line-length rule in particular is easier to satisfy while drafting
 than to retrofit.
 
+`npm test` does not check the lock file, but continuous integration
+installs with `npm ci`, which fails when `package.json` and
+`package-lock.json` disagree. Change a dependency by running
+`npm install`, never by editing `package.json` alone.
+
 ## Hard constraints
 
 These are not preferences, and a change that breaks one will be rejected.
