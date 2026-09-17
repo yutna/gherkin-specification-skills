@@ -42,8 +42,6 @@ and the installer no longer writes to that directory.
 - Fixed: the smell headings in `gherkin-scenario-review` now match
   `smell-catalogue.md`, so a smell leads to its rewrite. None of the
   fifteen matched before.
-- Fixed: `install.sh --claude-only` no longer writes into
-  `~/.agents/skills`; superseded by the removal above.
 - Added: `argument-hint` on every skill, so each shows what it expects in
   the slash menu.
 - Added: a check that the version in `package.json`, both manifests, and
