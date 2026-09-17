@@ -30,10 +30,11 @@ Reach for it when the task is to produce or revise scenario text:
 - Choosing what belongs in `Background` and what does not.
 
 If the examples themselves are not agreed yet, the input is still a vague
-requirement. Find the examples first, then come back here to phrase them.
+requirement. Find them first with `gherkin-discovery`, then come back here
+to phrase them.
 
-If the task is judging feature files that already exist, use the review
-skill instead. This skill writes; that one critiques.
+If the task is judging feature files that already exist, use
+`gherkin-scenario-review` instead. This skill writes; that one critiques.
 
 ## The shape of a scenario
 
@@ -233,7 +234,7 @@ Feature: Borrowing limits
 ```
 
 Keep the vocabulary small and meaningful. Tagging strategy for a whole
-suite belongs to the suite-design skill; here it is enough to tag
+suite belongs to `gherkin-suite-design`; here it is enough to tag
 deliberately and consistently.
 
 ## Localisation
@@ -265,7 +266,7 @@ every construct is in `references/keyword-reference.md`.
 - Name the data; do not inline unexplained numbers.
 - `Background` stays short or disappears.
 - Outlines need more than one row and no dead columns.
-- Five to eight steps is a healthy scenario. Beyond that, look for a
+- Three to eight steps is a healthy scenario. Beyond that, look for a
   missing `Given` that should summarise several actions.
 
 ## Common mistakes

@@ -55,9 +55,8 @@ src/
   drivers/
 ```
 
-The task and driver layers sit under `src/`, not under the test tree,
-because they are ordinary application code and should be usable outside the
-suite.
+Note where `tasks/` and `drivers/` sit: under `src/`, not under the test
+tree. `step-definition-patterns.md` explains why.
 
 ## Defining steps
 

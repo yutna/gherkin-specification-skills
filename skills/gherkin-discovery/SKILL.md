@@ -31,7 +31,7 @@ is settled.
 - An estimate is being requested for work nobody can describe precisely.
 
 If the examples are already agreed and the task is phrasing them, go
-straight to the scenario-writing skill.
+straight to `gherkin-scenario-writing`.
 
 ## The core loop
 

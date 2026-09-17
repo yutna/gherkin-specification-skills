@@ -156,17 +156,16 @@ features/lending/late-fees.feature
 steps/lending/fee.steps
 ```
 
-Group step definitions by domain area, never by keyword. A file containing
-every `Given` in the suite tells nobody anything and guarantees ambiguous
-matches.
+Mirror the feature tree in the step tree, so a directory of features has a
+matching directory of steps. What goes inside each step file, how to keep
+shared steps from collecting ambiguous matches, and where the task and
+driver layers belong are all questions about the glue rather than about
+layout; the `gherkin-automation` skill covers them.
 
-Keep a small file of genuinely universal steps — authentication, clock
-control — and treat additions to it with suspicion. Shared step files grow
-until they are the reason two steps collide.
-
-The task and driver layers are ordinary source code and belong in ordinary
-source directories, not under the test tree. That placement is also what
-lets them be reused by anything else that needs to drive the application.
+What layout decides is only this: the step tree follows the capability
+folders, and the task and driver layers live outside the test tree
+entirely, so the suite directory holds specifications and glue and nothing
+the application itself needs.
 
 ## Cross-cutting behaviour
 

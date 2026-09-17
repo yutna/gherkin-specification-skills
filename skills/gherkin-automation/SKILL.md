@@ -30,8 +30,8 @@ in the reference files.
 - Deciding whether a case belongs in Gherkin at all.
 
 If the scenarios themselves read as click-by-click scripts, no amount of
-glue design will save the suite; fix the wording with the review skill
-first.
+glue design will save the suite; fix the wording with
+`gherkin-scenario-review` first.
 
 ## The layering rule
 
