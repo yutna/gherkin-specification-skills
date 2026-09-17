@@ -40,10 +40,13 @@ suite more than once.
 ```java
 @Suite
 @IncludeEngines("cucumber")
-@SelectDirectories("src/test/resources/features")
+@SelectPackages("com.example.library")
 class RunCucumberTest {
 }
 ```
+
+The selector names a package, so the feature files live in the matching
+resource directory: `src/test/resources/com/example/library/`.
 
 The older annotated runner class still works and is worth migrating away
 from: engine-based discovery gives better tooling integration, parallel
@@ -52,7 +55,7 @@ execution, and filtering.
 ## Project shape
 
 ```text
-src/test/resources/features/
+src/test/resources/com/example/library/
   lending.feature
 src/test/java/com/example/library/steps/
   LendingSteps.java

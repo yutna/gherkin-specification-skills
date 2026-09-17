@@ -1,7 +1,7 @@
 ---
 name: gherkin-scenario-review
 description: Critique and repair feature files that already exist. Use when reviewing a pull request that touches .feature files, when asked whether a scenario is any good, when a suite has grown unreadable or brittle, when auditing acceptance criteria inherited from another team, or when asked to clean up or refactor existing Gherkin. Supplies a catalogue of scenario smells with the rewrite for each, a review rubric, and guidance on delivering the feedback.
-argument-hint: [.feature files, a path, or a pull request]
+argument-hint: "[.feature files, a path, or a pull request]"
 license: MIT
 metadata:
   version: "2.0.0"

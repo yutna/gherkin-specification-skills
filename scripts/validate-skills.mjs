@@ -133,6 +133,12 @@ function validateKeys (id, frontmatter) {
   if (frontmatter.license !== 'MIT') {
     fail(id, 'frontmatter "license" must be "MIT"')
   }
+  // `argument-hint: [a, b]` is a YAML flow sequence, so an unquoted hint
+  // silently becomes an array where a string is wanted.
+  const hint = frontmatter['argument-hint']
+  if (hint !== undefined && typeof hint !== 'string') {
+    fail(id, '"argument-hint" must be a string; quote it if it uses brackets')
+  }
   const { compatibility } = frontmatter
   if (compatibility !== undefined) {
     if (typeof compatibility !== 'string') {
