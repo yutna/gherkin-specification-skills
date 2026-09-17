@@ -18,9 +18,10 @@ container and scenario state is carried through `context.Context`.
 
 ## Runner setup
 
-The Go implementation runs as an ordinary Go test, which keeps the suite
-inside the normal toolchain: build tags, coverage, and the race detector
-all work.
+godog runs as an ordinary Go test, which keeps the suite inside the
+normal toolchain: build tags, coverage, and the race detector all work.
+The notes below assume godog v0.13 or later: `ScenarioContext.Given`,
+`When`, and `Then` arrived in v0.13, and `StepContext` in v0.12.
 
 ```go
 func TestFeatures(t *testing.T) {

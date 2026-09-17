@@ -21,15 +21,18 @@ integrations that most teams reach for.
 
 Two mainstream choices.
 
-The reference implementation runs feature files directly, owns its own
-World, and integrates with browser drivers through your own code. It is
-the right default when the suite is not primarily a browser suite.
+**cucumber-js** is the reference implementation. It runs feature files
+directly, owns its own World, and integrates with browser drivers through
+your own code. It is the right default when the suite is not primarily a
+browser suite. Configuration goes in `cucumber.json`, `cucumber.yaml`,
+`cucumber.yml`, `cucumber.js`, `cucumber.cjs`, or `cucumber.mjs`,
+whichever it finds first.
 
-The other approach layers Gherkin on top of a browser test runner,
+**playwright-bdd** layers Gherkin on top of a browser test runner,
 generating that runner's tests from feature files. It inherits the browser
 runner's fixtures, parallelism, tracing, and reporting, which is a large
 practical advantage for a browser-first suite. The trade is that scenario
-lifecycle follows the host runner's model rather than the classic one.
+lifecycle follows the host runner's model rather than cucumber-js's.
 
 Pick one per repository. Running both means two World models and two sets
 of hooks.
@@ -172,22 +175,31 @@ A doc string arrives as a plain string in the same last-argument position.
 
 ## TypeScript
 
-Type the World and register it once; every step body then gets
-completion on `this`.
+Declare the World as a class, then annotate `this` on each step and hook.
+That is what tells the compiler what `this` holds; there is no ambient
+declaration that does it for every step at once.
 
 ```typescript
-declare module '@cucumber/cucumber' {
-  interface World {
-    tasks: Tasks
-    drivers: Drivers
-    lastResult?: LoanResult
-  }
+class LibraryWorld extends World {
+  tasks!: Tasks
+  drivers!: Drivers
+  lastResult?: LoanResult
 }
+
+setWorldConstructor(LibraryWorld)
+
+When('{string} is borrowed by {word}',
+  async function (this: LibraryWorld, title: string, member: string) {
+    await this.tasks.lending.borrow(member, title)
+  })
 ```
 
-Compile ahead of time, or use a loader configured in the runner's own
-options. Source maps are worth the setup: without them, stack traces point
-at compiled output and every investigation starts with a translation step.
+Load support code with the `import` option, which uses the ES modules
+API; `require` is the CommonJS equivalent and only needed for a CommonJS
+project. The configuration file itself may be written in TypeScript with
+a `.ts`, `.mts`, or `.cts` extension. Source maps are worth the setup:
+without them, stack traces point at compiled output and every
+investigation starts with a translation step.
 
 ## Parallel runs
 

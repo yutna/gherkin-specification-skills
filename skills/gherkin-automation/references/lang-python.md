@@ -19,15 +19,17 @@ more here than in most ecosystems.
 
 ## Choosing a runner
 
-The pytest-based runner turns scenarios into pytest tests. Fixtures,
+**pytest-bdd** turns scenarios into pytest tests. Fixtures,
 parametrisation, plugins, parallel execution, and reporting all come from
 pytest, and the suite lives alongside ordinary unit tests. Choose it when
 the project already uses pytest, which is almost always.
 
-The standalone runner has its own execution model, its own context object,
-and its own hook set. It is simpler to start with and reads more like the
-other Cucumber implementations. Choose it when the suite is separate from
-the unit tests, or when a team already knows this model.
+**behave** is the standalone runner. It has its own execution model, its
+own context object, and its own hook set, and is configured with
+`behave.ini`, `.behaverc`, `setup.cfg`, or `pyproject.toml`. It is
+simpler to start with and reads more like the other Cucumber
+implementations. Choose it when the suite is separate from the unit
+tests, or when a team already knows this model.
 
 Do not mix them in one repository.
 
@@ -45,10 +47,12 @@ tests/
     drivers.py
 ```
 
-With the pytest-based runner, step-definition modules must be named so
-pytest collects them, which normally means a `test_` prefix. A file of
-perfectly good steps named `lending_steps.py` is simply never loaded, and
-every step reports as undefined.
+With pytest-bdd it is the module calling `scenarios()` that pytest must
+collect, so that one needs a `test_` prefix. Step definitions themselves
+do not: put shared ones in `conftest.py`, or in any module the test file
+imports, and they load fine. The failure to watch for is a step file that
+nothing imports and that pytest does not collect either, which leaves
+every step in it undefined.
 
 ## The pytest-based runner
 
@@ -214,16 +218,16 @@ def step_catalogue(context):
 `context.table` is iterable with dictionary-style access by header, and
 `context.text` holds a doc string.
 
-The pytest-based runner passes a data table to the step function as a
-string in older versions and as a structured argument in current ones;
-check which is in use before parsing by hand.
+With pytest-bdd, declare a `datatable` argument on the step function and
+it arrives as a list of lists. The header is the first row, so a step that
+wants only the data iterates from `datatable[1:]`. The argument may only
+be declared on a step that actually has a table attached.
 
 ## Parallel runs
 
-With the pytest-based runner, parallelism comes from the usual pytest
-distribution plugin and works at test level, meaning per scenario. The
-requirements are the ordinary ones: no globals, unique identifiers across
-processes, per-worker resources.
+With pytest-bdd, parallelism comes from `pytest-xdist` and works at test
+level, meaning per scenario. The requirements are the ordinary ones: no
+globals, unique identifiers across processes, per-worker resources.
 
 The standalone runner has no built-in parallelism. Teams normally shard by
 feature file across processes in CI, which is coarser but adequate.
@@ -239,9 +243,9 @@ Keep the loop on the context or in a session-scoped fixture and reuse it.
 
 ## Pitfalls
 
-- Step modules the collector never loads: a missing `test_` prefix with
-  the pytest-based runner, or a file outside `steps/` with the standalone
-  one.
+- Step modules nothing ever loads: with pytest-bdd, a step file that is
+  neither `conftest.py` nor imported by a collected test; with behave, a
+  file outside `steps/`.
 - Module-level globals holding scenario state.
 - Setting values in `before_all` that were meant to be per scenario.
 - Session-scoped fixtures holding mutable state.

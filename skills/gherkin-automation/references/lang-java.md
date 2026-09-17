@@ -19,15 +19,29 @@ of the work that other ecosystems do by hand.
 
 ## Runner setup
 
-The modern approach runs feature files through the platform's own test
-engine, discovered like any other test, with configuration in a properties
-file rather than annotations on a runner class.
+The modern approach runs feature files through the JUnit Platform's own
+test engine, discovered like any other test, with configuration in
+`src/test/resources/junit-platform.properties` rather than annotations on
+a runner class. The filename matters: the engine reads its settings only
+from that file.
 
 ```properties
 cucumber.glue=com.example.library.steps
-cucumber.features=src/test/resources/features
 cucumber.plugin=pretty, html:target/report.html
 cucumber.publish.quiet=true
+```
+
+Point the engine at the features with a suite class rather than with a
+`cucumber.features` property. Setting that property makes the engine
+ignore every JUnit Platform discovery selector, which can run the whole
+suite more than once.
+
+```java
+@Suite
+@IncludeEngines("cucumber")
+@SelectDirectories("src/test/resources/features")
+class RunCucumberTest {
+}
 ```
 
 The older annotated runner class still works and is worth migrating away
@@ -128,9 +142,10 @@ public class ParameterTypes {
 The method name becomes the placeholder name, so `member(...)` defines
 `{member}`. Types registered this way are available to every glue class.
 
-Register a `DefaultParameterTransformer` and a `DataTableEntryDefinition`
-when many steps convert the same shapes; it removes a great deal of
-repetitive parsing.
+Register a `@DefaultParameterTransformer` and a
+`@DefaultDataTableEntryTransformer` when many steps convert the same
+shapes; both live in `io.cucumber.java` and together they remove a great
+deal of repetitive parsing.
 
 ## Hooks
 
@@ -208,7 +223,9 @@ Spring suite fast. Anything that dirties it forces a restart, so avoid
 
 ## Parallel runs
 
-Enable it in the properties file:
+Enable it in `junit-platform.properties`. These keys are read from that
+file alone, so putting them in `cucumber.properties` silently does
+nothing:
 
 ```properties
 cucumber.execution.parallel.enabled=true
