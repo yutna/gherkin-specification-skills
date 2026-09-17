@@ -5,8 +5,9 @@ specification properly: find the examples, phrase them as readable
 Gherkin, review what already exists, implement thin step definitions, and
 keep a suite people trust.
 
-Written to the Agent Skills open standard, so the same files work in
-Claude Code and in Codex without modification.
+Written to the Agent Skills open standard, and built for Claude Code:
+install them as a plugin, or drop the directories into `~/.claude/skills`
+and start a session.
 
 ## The five skills
 
@@ -29,30 +30,17 @@ lives in `references/` files that the agent loads only when it needs them.
 
 ## Install
 
-### Claude Code, as a plugin
+### As a plugin
 
 ```text
 /plugin marketplace add yutna/gherkin-specification-skills
 /plugin install gherkin-specification-skills@gherkin-specification-skills
 ```
 
-### Codex
+### With the install script
 
-Copy the skills into a directory Codex scans:
-
-```bash
-git clone https://github.com/yutna/gherkin-specification-skills.git
-cp -R gherkin-specification-skills/skills/* ~/.agents/skills/
-```
-
-`~/.codex/skills/` also works if that is where your other skills live.
-For a single project, `.agents/skills/` inside the repository is scanned
-too.
-
-### Both at once, with the install script
-
-Copies the skills into `~/.agents/skills/` and links them from
-`~/.claude/skills/`, so both runtimes read the same files:
+Copies every skill into `~/.claude/skills/`, where Claude Code finds it
+in any project:
 
 ```bash
 git clone https://github.com/yutna/gherkin-specification-skills.git
@@ -60,22 +48,14 @@ cd gherkin-specification-skills
 ./scripts/install.sh
 ```
 
-Options: `--claude-only`, `--codex-only`, `--force`, `--dry-run`.
-
-### Cross-agent CLI
-
-The layout matches what the `skills` CLI expects, so this works too and
-reaches the other agents it supports:
-
-```bash
-npx skills add yutna/gherkin-specification-skills
-```
+Options: `--force` to replace an existing copy, `--dry-run` to see what
+it would do.
 
 ### By hand
 
-Copy any `skills/<name>/` directory into `~/.claude/skills/` or
-`~/.agents/skills/`. There is nothing to build and no dependency to
-install.
+Copy any `skills/<name>/` directory into `~/.claude/skills/` for every
+project, or into a project's `.claude/skills/` for one repository. There
+is nothing to build and no dependency to install.
 
 Start a new session afterwards, whichever route you took.
 
@@ -107,10 +87,11 @@ npm test
   be accepted. In practice the binding constraints are an 80-character
   line limit that also covers code blocks and tables, unique heading text
   within each file, and no inline HTML.
-- `scripts/validate-skills.mjs`, which checks every `SKILL.md` against the
-  portable frontmatter subset: `name` matching its directory, a
-  `description` under 1024 characters, `license: MIT`, and no keys outside
-  the open standard.
+- `scripts/validate-skills.mjs`, which checks every `SKILL.md` against
+  the frontmatter Claude Code accepts: `name` matching its directory, a
+  `description` that fits the 1536-character budget it shares with
+  `when_to_use`, `license: MIT`, no key outside the documented set, and a
+  `metadata.version` matching `package.json`.
 - `scripts/validate-gherkin.mjs`, which extracts every fenced `gherkin`
   block in the repository and parses it with a real Gherkin parser. Every
   published example is therefore valid Gherkin, including the deliberately
@@ -122,18 +103,16 @@ To work on the skills with an agent inside this repository:
 ./scripts/link-local.sh
 ```
 
-That links `skills/` into `.claude/skills/` and `.agents/skills/`, both of
-which are gitignored. Undo it with `--remove`.
+That links `skills/` into `.claude/skills/`, which is gitignored. Undo it
+with `--remove`.
 
 ## Repository layout
 
 ```text
 skills/<name>/SKILL.md        the skill, and the single source of truth
 skills/<name>/references/     detail loaded on demand
-scripts/                      installers and validators
-.claude-plugin/               Claude Code plugin and marketplace manifests
-.codex-plugin/                Codex plugin manifest
-.agents/plugins/              Codex marketplace manifest
+scripts/                      installer and validators
+.claude-plugin/               plugin and marketplace manifests
 ```
 
 The manifests and the install script all point at `skills/`. No file
@@ -142,8 +121,8 @@ duplicates skill content.
 ## Contributing
 
 See `CONTRIBUTING.md`. In short: run `npm test` before opening a pull
-request, keep to the portable frontmatter subset, and write examples that
-parse.
+request, keep frontmatter inside the set the validator accepts, and write
+examples that parse.
 
 ## License
 

@@ -32,10 +32,11 @@ examples short, which suits the subject.
 
 **Skill validation** checks every `SKILL.md`: `name` must match its
 directory and be lowercase kebab-case, `description` must be present and
-under 1024 characters, `license` must be `MIT`, and no frontmatter key
-may fall outside `name`, `description`, `license`, `compatibility`,
-`metadata`, and `allowed-tools`. That subset is what makes the same file
-work in both Claude Code and Codex.
+fit the 1536-character budget it shares with `when_to_use`, `license`
+must be `MIT`, `metadata.version` must match `package.json`, and no
+frontmatter key may fall outside the set Claude Code documents. The
+validator holds that list; adding a key it rejects means the key is
+either a typo or a feature this runtime does not have.
 
 **Gherkin validation** extracts every fenced `gherkin` block in the
 repository and parses it. Fragments are wrapped automatically, so a few
@@ -95,8 +96,9 @@ If it is accepted:
 1. Create `skills/<name>/SKILL.md`.
 1. Run `npm test`.
 
-No manifest edit is needed. Both plugin manifests declare
+No manifest edit is needed. `.claude-plugin/plugin.json` declares
 `"skills": "./skills/"`, so a new directory is picked up automatically.
+Its `metadata.version` must match `package.json`, or `npm test` fails.
 
 ## Pull requests
 

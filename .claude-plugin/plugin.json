@@ -18,5 +18,17 @@
     "living-documentation",
     "testing"
   ],
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Gherkin Specification Skills",
+    "shortDescription": "Write, review, and automate Gherkin specifications",
+    "longDescription": "Turn requirements into agreed examples, phrase them as readable Gherkin, review feature files against a smell catalogue, implement thin step definitions, and design a suite that stays trusted.",
+    "developerName": "Yutthana Siphuengchai",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/yutna/gherkin-specification-skills"
+  }
 }

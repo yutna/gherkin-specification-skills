@@ -21,16 +21,11 @@ body:
         - Not sure / none triggered
     validations:
       required: true
-  - type: dropdown
-    id: runtime
+  - type: input
+    id: version
     attributes:
-      label: Where you ran it
-      options:
-        - Claude Code
-        - Codex
-        - Another agent
-    validations:
-      required: true
+      label: Claude Code version
+      description: The output of `claude --version`.
   - type: textarea
     id: asked
     attributes:

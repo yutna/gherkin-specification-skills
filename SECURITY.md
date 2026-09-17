@@ -2,9 +2,9 @@
 
 ## What this repository contains
 
-Markdown skill files, two Node validation scripts, and two shell
-installers. The skills themselves are documentation: they are read by an
-agent and contain no executable content.
+Markdown skill files, two Node validation scripts, and two shell scripts
+that install or link them. The skills themselves are documentation: they
+are read by an agent and contain no executable content.
 
 The parts that do run on a contributor's machine are:
 
@@ -49,8 +49,8 @@ Out of scope:
 - Vulnerabilities in Cucumber, Reqnroll, behave, pytest-bdd, godog, or
   any other tool the skills mention. Report those to their own
   maintainers.
-- Behaviour of Claude Code, Codex, or any other agent that reads these
-  skills. Report those to the vendor concerned.
+- Behaviour of Claude Code itself, or of any other agent that reads
+  these skills. Report those to the vendor concerned.
 - Issues that require an attacker to already have write access to the
   machine running the scripts.
 

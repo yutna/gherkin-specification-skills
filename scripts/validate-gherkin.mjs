@@ -22,9 +22,8 @@ const ROOT = dirname(dirname(fileURLToPath(import.meta.url)))
 const SKIP_DIRS = new Set(['node_modules', '.git'])
 const uuid = IdGenerator.uuid()
 
-// Symlinked directories are skipped: link-local.sh points .claude/skills and
-// .agents/skills at skills/, and following them would parse everything three
-// times.
+// Symlinked directories are skipped: link-local.sh points .claude/skills at
+// skills/, and following the links would parse everything twice.
 function collectMarkdown (dir, found = []) {
   for (const entry of readdirSync(dir)) {
     if (SKIP_DIRS.has(entry)) continue
