@@ -4,7 +4,7 @@ description: Implement and repair the code behind Gherkin steps. Use when writin
 argument-hint: "[step, glue file, or failing scenario]"
 license: MIT
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   author: yutna
 ---
 

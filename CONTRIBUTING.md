@@ -98,10 +98,10 @@ that could both claim a task means neither gets chosen reliably.
 
 If it is accepted:
 
-1. Create `skills/<name>/SKILL.md`.
+1. Create `plugin/skills/<name>/SKILL.md`.
 1. Run `npm test`.
 
-No manifest edit is needed. `.claude-plugin/plugin.json` declares
+No manifest edit is needed. `plugin/.claude-plugin/plugin.json` declares
 `"skills": "./skills/"`, so a new directory is picked up automatically.
 Its `metadata.version` must match `package.json`, or `npm test` fails.
 

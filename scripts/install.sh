@@ -3,14 +3,14 @@
 # Installs the skills into ~/.claude/skills, where Claude Code discovers
 # personal skills in every project.
 #
-# Each skills/<name> directory is copied whole, so the installed copy is
-# independent of this checkout. To work on the skills instead, use
+# Each plugin/skills/<name> directory is copied whole, so the installed copy
+# is independent of this checkout. To work on the skills instead, use
 # scripts/link-local.sh, which links them into the repository itself.
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SKILLS_SRC="${REPO_ROOT}/skills"
+SKILLS_SRC="${REPO_ROOT}/plugin/skills"
 
 CLAUDE_DIR="${HOME}/.claude/skills"
 
@@ -21,7 +21,7 @@ usage() {
   cat <<'USAGE'
 Usage: scripts/install.sh [options]
 
-Copies every skills/<name> directory into ~/.claude/skills.
+Copies every plugin/skills/<name> directory into ~/.claude/skills.
 
 Options:
   --force         Overwrite skills that are already installed

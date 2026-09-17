@@ -3,13 +3,17 @@
 // accepts, and checks that the version recorded in each skill matches the one
 // in package.json.
 
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parse as parseYaml } from 'yaml'
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)))
-const SKILLS_DIR = join(ROOT, 'skills')
+// The plugin lives in its own directory so that package.json and the lock
+// file stay outside it. A lock file at a plugin's root makes the installer
+// run npm on every user's machine; see CLAUDE.md.
+const PLUGIN_DIR = join(ROOT, 'plugin')
+const SKILLS_DIR = join(PLUGIN_DIR, 'skills')
 
 // Every frontmatter key Claude Code documents. A key outside this set is
 // either a typo or a feature this runtime does not have, and both are worth
@@ -62,7 +66,7 @@ function readSkillDirs () {
   try {
     entries = readdirSync(SKILLS_DIR)
   } catch {
-    errors.push('skills/: directory not found')
+    errors.push('plugin/skills/: directory not found')
     return []
   }
   return entries
@@ -275,11 +279,11 @@ function validateVersion (id, frontmatter) {
 }
 
 function validateManifestVersions () {
-  const plugin = readJson('.claude-plugin/plugin.json')
+  const plugin = readJson('plugin/.claude-plugin/plugin.json')
   if (plugin.version !== EXPECTED_VERSION) {
     errors.push(
-      `.claude-plugin/plugin.json: "version" is "${plugin.version}" but ` +
-        `package.json is "${EXPECTED_VERSION}"`,
+      `plugin/.claude-plugin/plugin.json: "version" is "${plugin.version}" ` +
+        `but package.json is "${EXPECTED_VERSION}"`,
     )
   }
   const marketplace = readJson('.claude-plugin/marketplace.json')
@@ -288,6 +292,20 @@ function validateManifestVersions () {
       errors.push(
         `.claude-plugin/marketplace.json: "${entry.name}" is at ` +
           `"${entry.version}" but package.json is "${EXPECTED_VERSION}"`,
+      )
+    }
+  }
+}
+
+// A package.json beside a package-lock.json at the plugin's root makes
+// `claude plugin install` run npm on the machine of everyone who installs it,
+// pulling this repository's dev tooling for no benefit. Keep both outside.
+function validateNoPackageFilesInPlugin () {
+  for (const file of ['package.json', 'package-lock.json']) {
+    if (existsSync(join(PLUGIN_DIR, file))) {
+      errors.push(
+        `plugin/${file}: must not exist. A lock file at the plugin root ` +
+          'makes the installer run npm for everyone who installs the plugin.',
       )
     }
   }
@@ -309,12 +327,13 @@ function validateDistinctDescriptions (ids) {
 
 const skillIds = readSkillDirs()
 if (skillIds.length === 0 && errors.length === 0) {
-  errors.push('skills/: no skill directories found')
+  errors.push('plugin/skills/: no skill directories found')
 }
 for (const id of skillIds) {
   validateSkill(id)
 }
 validateManifestVersions()
+validateNoPackageFilesInPlugin()
 if (errors.length === 0) {
   validateDistinctDescriptions(skillIds)
 }

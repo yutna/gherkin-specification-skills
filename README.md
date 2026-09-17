@@ -53,9 +53,9 @@ it would do.
 
 ### By hand
 
-Copy any `skills/<name>/` directory into `~/.claude/skills/` for every
-project, or into a project's `.claude/skills/` for one repository. There
-is nothing to build and no dependency to install.
+Copy any `plugin/skills/<name>/` directory into `~/.claude/skills/` for
+every project, or into a project's `.claude/skills/` for one repository.
+There is nothing to build and no dependency to install.
 
 Start a new session afterwards, whichever route you took.
 
@@ -114,20 +114,27 @@ To work on the skills with an agent inside this repository:
 ./scripts/link-local.sh
 ```
 
-That links `skills/` into `.claude/skills/`, which is gitignored. Undo it
-with `--remove`.
+That links `plugin/skills/` into `.claude/skills/`, which is gitignored.
+Undo it with `--remove`.
 
 ## Repository layout
 
 ```text
-skills/<name>/SKILL.md        the skill, and the single source of truth
-skills/<name>/references/     detail loaded on demand
-scripts/                      installer and validators
-.claude-plugin/               plugin and marketplace manifests
+plugin/skills/<name>/SKILL.md      the skill, and the single source of truth
+plugin/skills/<name>/references/   detail loaded on demand
+plugin/.claude-plugin/             the plugin manifest
+.claude-plugin/marketplace.json    the marketplace manifest
+scripts/                           installer and validators
 ```
 
-The manifests and the install script all point at `skills/`. No file
-duplicates skill content.
+Everything the plugin ships lives under `plugin/`. The repository's own
+tooling — `package.json`, the lock file, `scripts/` — deliberately sits
+outside it, because a lock file at a plugin's root makes
+`claude plugin install` run npm on the machine of everyone who installs
+it. `npm test` fails if either file reappears under `plugin/`.
+
+The manifests and the install script all point at `plugin/skills/`. No
+file duplicates skill content.
 
 ## Contributing
 

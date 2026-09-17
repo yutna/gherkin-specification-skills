@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Makes the skills discoverable inside this repository while working on
-# them, by linking skills/<name> into .claude/skills, the per-project
+# them, by linking plugin/skills/<name> into .claude/skills, the per-project
 # location Claude Code scans.
 #
 # The target directory is gitignored, so nothing here is committed and
@@ -10,7 +10,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SKILLS_SRC="${REPO_ROOT}/skills"
+SKILLS_SRC="${REPO_ROOT}/plugin/skills"
 
 CLAUDE_DIR="${REPO_ROOT}/.claude/skills"
 
@@ -24,8 +24,8 @@ if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
   cat <<'USAGE'
 Usage: scripts/link-local.sh [--remove]
 
-Links skills/<name> into .claude/skills so an agent working in this
-repository picks them up without installing anything.
+Links plugin/skills/<name> into .claude/skills so an agent working in
+this repository picks them up without installing anything.
 
   --remove   Delete the links again
 USAGE

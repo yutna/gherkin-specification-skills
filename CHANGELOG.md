@@ -8,6 +8,24 @@ runs.
 
 This project adheres to semantic versioning.
 
+## 2.0.1
+
+Released 2026-09-18.
+
+- Fixed: installing the plugin no longer runs npm on the installer's
+  machine. A `package-lock.json` at a plugin's root makes
+  `claude plugin install` install that package's dependencies, so every
+  user was getting this repository's 83 dev packages — about 18 MB of
+  Markdown linting and Gherkin parsing tooling they never run. The plugin
+  now lives in `plugin/`, leaving `package.json` and the lock file
+  outside it, and `npm test` fails if either reappears there. Nothing
+  about the installed skills changes.
+- Changed: skills moved from `skills/` to `plugin/skills/`, and the
+  plugin manifest from `.claude-plugin/plugin.json` to
+  `plugin/.claude-plugin/plugin.json`. The marketplace manifest stays at
+  the repository root. Installing by hand now copies
+  `plugin/skills/<name>/`; every documented command is unchanged.
+
 ## 2.0.0
 
 Released 2026-09-18.
