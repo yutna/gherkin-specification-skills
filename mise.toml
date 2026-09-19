@@ -1,9 +1,10 @@
-# Development toolchain for this repository.
+# Development toolchain for this repository, and the single place the Node
+# version is written. .github/workflows/ci.yml reads this file through
+# actions/setup-node's node-version-file, so continuous integration and a
+# local `mise install` always agree.
 #
 # Node is the only thing needed: the two validation scripts run on it, and
-# markdownlint-cli2 comes from npm. Continuous integration tests both this
-# version and the floor declared in package.json's "engines", so a change
-# here should be reflected in the matrix in .github/workflows/ci.yml.
+# markdownlint-cli2 comes from npm.
 
 [tools]
-node = "24"
+node = "24.20.0"
