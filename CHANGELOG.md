@@ -8,7 +8,12 @@ runs.
 
 This project adheres to semantic versioning.
 
-## Unreleased
+## 2.1.0
+
+Released 2026-09-19.
+
+Tooling and contribution workflow only. Nothing in the five skills
+changed, so an installed copy behaves exactly as it did at 2.0.1.
 
 - Fixed: a denial-of-service advisory in `smol-toml`, reached through
   `markdownlint-cli2`. npm's only suggested fix was to downgrade
