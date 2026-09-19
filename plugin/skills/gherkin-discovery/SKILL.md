@@ -4,7 +4,7 @@ description: Turn a vague story, ticket, or requirement into agreed concrete exa
 argument-hint: "[ticket, story, or requirement]"
 license: MIT
 metadata:
-  version: "2.0.1"
+  version: "2.1.0"
   author: yutna
 ---
 
