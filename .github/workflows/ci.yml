@@ -6,6 +6,13 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Pushing twice to a pull request in quick succession otherwise leaves the
+# first run going and its status hanging. Runs on main are left alone, so
+# every commit there keeps a status of its own.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
