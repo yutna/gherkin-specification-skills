@@ -60,6 +60,9 @@ jobs:
                 problems.push('add one priority label: priority: high, medium, or low')
               }
             }
+            // More than one type is allowed: a release that also carries
+            // a fix is two honest labels. Priority is a single ordering,
+            // so more than one of those is a contradiction.
             if (priority.length > 1) {
               problems.push(`only one priority label, found: ${priority.join(', ')}`)
             }

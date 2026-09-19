@@ -49,7 +49,10 @@ repository and parses it. Fragments are wrapped automatically, so a few
 bare steps are fine, but the parse has to find Gherkin in the snippet: a
 `Feature` description swallows any text put under it, so a block that
 parses only as description text fails the build. A mistyped keyword is
-the usual cause.
+the usual cause. The wrapping is a `Feature` and a `Scenario`, so a
+fragment has to be something one of those could hold: a bare `Examples`
+table, a lone data table, and a doc string on its own are none of them,
+and belong in the outline or the step they go with.
 
 **Script checks** run the four installer scripts against a throwaway copy
 of the repository with its own `HOME`, and compare what the shell and
@@ -126,11 +129,14 @@ Its `metadata.version` must match `package.json`, or `npm test` fails.
 
 ## Pull requests
 
-- Every pull request needs one type label — `feature`, `release`, `bug`,
-  `hotfix`, `chore`, or `documentation` — and one priority label. A check
-  enforces both, so a pull request without them cannot merge. Other
-  labels, such as `breaking-change`, `security`, and `skill`, are
-  optional and worth using when they fit.
+- Every pull request needs at least one type label — `feature`,
+  `release`, `bug`, `hotfix`, `chore`, or `documentation` — and exactly
+  one priority label. A check enforces both, so a pull request without
+  them cannot merge. More than one type is allowed, because a release
+  that also carries a fix is two honest labels; more than one priority is
+  not, because priority is a single ordering. Other labels, such as
+  `breaking-change`, `security`, and `skill`, are optional and worth
+  using when they fit.
 - One subject per pull request. A wording fix and a new skill are two
   changes.
 - Say which skill you changed and why in the description.
