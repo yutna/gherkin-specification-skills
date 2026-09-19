@@ -51,6 +51,16 @@ cd gherkin-specification-skills
 Options: `--force` to replace an existing copy, `--dry-run` to see what
 it would do.
 
+On Windows, without needing a shell or WSL:
+
+```powershell
+git clone https://github.com/yutna/gherkin-specification-skills.git
+cd gherkin-specification-skills
+.\scripts\install.ps1
+```
+
+Same options, as `-Force` and `-DryRun`. PowerShell 7 or later.
+
 ### By hand
 
 Copy any `plugin/skills/<name>/` directory into `~/.claude/skills/` for
@@ -114,8 +124,11 @@ To work on the skills with an agent inside this repository:
 ./scripts/link-local.sh
 ```
 
-That links `plugin/skills/` into `.claude/skills/`, which is gitignored.
-Undo it with `--remove`.
+On Windows, `.\scripts\link-local.ps1`, which makes directory junctions
+and so needs neither administrator rights nor developer mode.
+
+Either links `plugin/skills/` into `.claude/skills/`, which is
+gitignored. Undo it with `--remove`, or `-Remove` in PowerShell.
 
 ## Repository layout
 
@@ -124,7 +137,7 @@ plugin/skills/<name>/SKILL.md      the skill, and the single source of truth
 plugin/skills/<name>/references/   detail loaded on demand
 plugin/.claude-plugin/             the plugin manifest
 .claude-plugin/marketplace.json    the marketplace manifest
-scripts/                           installer and validators
+scripts/                           installers and validators
 .node-version                      the Node version, read by CI as well
 ```
 

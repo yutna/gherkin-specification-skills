@@ -22,6 +22,10 @@ To load the skills in an agent while you work on them:
 ./scripts/link-local.sh
 ```
 
+On Windows, `.\scripts\link-local.ps1`. The shell and PowerShell scripts
+are kept in step deliberately, so a change to one belongs in the same
+commit as the change to the other.
+
 ## The checks
 
 `npm test` runs three things, and all three must pass.
@@ -48,6 +52,10 @@ Continuous integration installs with `npm ci`, which refuses to run when
 `package.json` and `package-lock.json` disagree. So a change to any
 dependency version has to be made by running `npm install`, not by
 editing `package.json` by hand.
+
+Dependencies are pinned to exact versions, never ranges. `.npmrc` sets
+`save-exact`, so `npm install <package>` already does the right thing,
+and `npm test` fails if a range appears.
 
 ## Linting rules that catch people out
 

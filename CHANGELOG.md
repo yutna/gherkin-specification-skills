@@ -15,6 +15,15 @@ This project adheres to semantic versioning.
   `markdownlint-cli2` by a major version, so the transitive dependency is
   pinned with an `overrides` entry instead. Remove it once upstream ships
   the patched version.
+- Added: `scripts/install.ps1` and `scripts/link-local.ps1`, so Windows
+  users with neither a shell nor WSL have a supported route. The
+  PowerShell links are directory junctions, which need no administrator
+  rights.
+- Added: `.editorconfig`, matching what the linters already expect.
+- Added: `.npmrc` with `save-exact`, and a check that fails `npm test` if
+  any dependency carries a range rather than an exact version.
+- Fixed: `install.sh --dry-run` said `copied` for files it had not
+  copied, and interleaved `mkdir` noise between the lines that mattered.
 - Added: `.node-version`, pinning Node to an exact version, and
   `mise.toml`, which tells mise to honour it. Both `mise install` and
   `actions/setup-node` read `.node-version`, so the version is written
