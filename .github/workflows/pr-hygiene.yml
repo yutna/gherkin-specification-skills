@@ -64,8 +64,10 @@ jobs:
               problems.push(`only one priority label, found: ${priority.join(', ')}`)
             }
 
+            // One line: GitHub shows only the first line of a failure
+            // annotation, so a newline here would hide the second problem.
             if (problems.length > 0) {
-              core.setFailed(problems.join('\n'))
+              core.setFailed(problems.join('; '))
             } else {
               core.info(`labels ok: ${names.join(', ') || '(bot, none required)'}`)
             }
