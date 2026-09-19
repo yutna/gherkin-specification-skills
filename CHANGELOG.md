@@ -15,6 +15,16 @@ This project adheres to semantic versioning.
   `markdownlint-cli2` by a major version, so the transitive dependency is
   pinned with an `overrides` entry instead. Remove it once upstream ships
   the patched version.
+- Added: a pull request hygiene check. It assigns the author, and
+  requires one type label and one priority label before a pull request
+  can merge. Dependabot is held to `dependencies` instead, since it
+  cannot choose labels.
+- Added: `.github/dependabot.yml`, updating GitHub Actions monthly. npm
+  is deliberately excluded; a markdownlint release can add a rule and
+  turn the build red with no content change, so those bumps want a person
+  deciding when to take them.
+- Changed: `actions/checkout` to v5 and `actions/setup-node` to v7. v4
+  was running on a deprecated Node version on the runner.
 - Added: `scripts/install.ps1` and `scripts/link-local.ps1`, so Windows
   users with neither a shell nor WSL have a supported route. The
   PowerShell links are directory junctions, which need no administrator

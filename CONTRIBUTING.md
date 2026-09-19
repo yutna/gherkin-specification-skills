@@ -117,6 +117,11 @@ Its `metadata.version` must match `package.json`, or `npm test` fails.
 
 ## Pull requests
 
+- Every pull request needs one type label — `feature`, `release`, `bug`,
+  `hotfix`, `chore`, or `documentation` — and one priority label. A check
+  enforces both, so a pull request without them cannot merge. Other
+  labels, such as `breaking-change`, `security`, and `skill`, are
+  optional and worth using when they fit.
 - One subject per pull request. A wording fix and a new skill are two
   changes.
 - Say which skill you changed and why in the description.
