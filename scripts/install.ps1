@@ -29,7 +29,15 @@ $skillsSrc = Join-Path $repoRoot 'plugin' 'skills'
 $claudeDir = Join-Path $HOME '.claude' 'skills'
 
 if (-not (Test-Path -LiteralPath $skillsSrc)) {
-  Write-Error "$skillsSrc not found"
+  [Console]::Error.WriteLine("error: $skillsSrc not found")
+  exit 1
+}
+
+# install.sh treats a name as taken when -e or -L holds, so a link left
+# pointing at a directory that has gone still counts as installed. Get-Item
+# with -Force asks that question directly: does the name exist, link or not.
+function Test-Occupied ([string] $path) {
+  return $null -ne (Get-Item -LiteralPath $path -Force -ErrorAction Ignore)
 }
 
 $installed = 0
@@ -38,7 +46,7 @@ $skipped = 0
 foreach ($src in Get-ChildItem -LiteralPath $skillsSrc -Directory) {
   $dest = Join-Path $claudeDir $src.Name
 
-  if ((Test-Path -LiteralPath $dest) -and -not $Force) {
+  if ((Test-Occupied $dest) -and -not $Force) {
     Write-Host "skip   $($src.Name) (already installed; use -Force to replace)"
     $skipped++
     continue
@@ -48,7 +56,7 @@ foreach ($src in Get-ChildItem -LiteralPath $skillsSrc -Directory) {
     Write-Host "would   copy $($src.Name) -> $dest"
   } else {
     New-Item -ItemType Directory -Path $claudeDir -Force | Out-Null
-    if (Test-Path -LiteralPath $dest) {
+    if (Test-Occupied $dest) {
       Remove-Item -LiteralPath $dest -Recurse -Force
     }
     Copy-Item -LiteralPath $src.FullName -Destination $dest -Recurse
@@ -58,8 +66,11 @@ foreach ($src in Get-ChildItem -LiteralPath $skillsSrc -Directory) {
 }
 
 Write-Host ''
-Write-Host "$installed skill(s) installed, $skipped skipped"
-
-if ($installed -gt 0 -and -not $DryRun) {
-  Write-Host 'Start a new session for the skills to be discovered.'
+if ($DryRun) {
+  Write-Host "$installed skill(s) would be installed, $skipped skipped"
+} else {
+  Write-Host "$installed skill(s) installed, $skipped skipped"
+  if ($installed -gt 0) {
+    Write-Host 'Start a new session for the skills to be discovered.'
+  }
 }
