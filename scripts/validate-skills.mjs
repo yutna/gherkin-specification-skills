@@ -71,7 +71,15 @@ function readSkillDirs () {
   }
   return entries
     .filter((entry) => !entry.startsWith('.'))
-    .filter((entry) => statSync(join(SKILLS_DIR, entry)).isDirectory())
+    .filter((entry) => {
+      // A broken link in the directory should be reported, not thrown.
+      try {
+        return statSync(join(SKILLS_DIR, entry)).isDirectory()
+      } catch {
+        errors.push(`plugin/skills/${entry}: cannot be read`)
+        return false
+      }
+    })
     .sort()
 }
 
@@ -254,11 +262,25 @@ function validateSkill (id) {
   validateReferences(id, dir, match[2])
 }
 
+// A missing or malformed manifest is a validation failure with a message,
+// not a stack trace: the person running this wants to know which file.
 function readJson (relative) {
-  return JSON.parse(readFileSync(join(ROOT, relative), 'utf8'))
+  let raw
+  try {
+    raw = readFileSync(join(ROOT, relative), 'utf8')
+  } catch {
+    errors.push(`${relative}: not found`)
+    return null
+  }
+  try {
+    return JSON.parse(raw)
+  } catch (error) {
+    errors.push(`${relative}: is not valid JSON: ${error.message}`)
+    return null
+  }
 }
 
-const EXPECTED_VERSION = readJson('package.json').version
+const EXPECTED_VERSION = readJson('package.json')?.version
 
 // The version is recorded in eight places. Nothing in the packaging tooling
 // keeps them in step, so a release that updates seven of them ships a skill
@@ -280,6 +302,7 @@ function validateVersion (id, frontmatter) {
 
 function validateManifestVersions () {
   const plugin = readJson('plugin/.claude-plugin/plugin.json')
+  if (plugin === null) return
   if (plugin.version !== EXPECTED_VERSION) {
     errors.push(
       `plugin/.claude-plugin/plugin.json: "version" is "${plugin.version}" ` +
@@ -287,7 +310,7 @@ function validateManifestVersions () {
     )
   }
   const marketplace = readJson('.claude-plugin/marketplace.json')
-  for (const entry of marketplace.plugins ?? []) {
+  for (const entry of marketplace?.plugins ?? []) {
     if (entry.version !== undefined && entry.version !== EXPECTED_VERSION) {
       errors.push(
         `.claude-plugin/marketplace.json: "${entry.name}" is at ` +
@@ -316,18 +339,31 @@ function validateNoPackageFilesInPlugin () {
 // content change. .npmrc sets save-exact; this catches a hand-edited range.
 const EXACT_VERSION = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/
 
+// `overrides` nests: {"a": {"b": "^1.0.0"}} pins b only inside a. Walking
+// the tree keeps a range from hiding one level down.
+function checkVersionTree (field, node, path) {
+  for (const [name, value] of Object.entries(node ?? {})) {
+    if (name === '.') continue
+    const where = path.length > 0 ? `${path}.${name}` : name
+    if (value !== null && typeof value === 'object') {
+      checkVersionTree(field, value, where)
+      continue
+    }
+    if (typeof value !== 'string') continue
+    if (!EXACT_VERSION.test(value)) {
+      errors.push(
+        `package.json: ${field}."${where}" is "${value}"; dependencies are ` +
+          'pinned to an exact version, never a range',
+      )
+    }
+  }
+}
+
 function validateExactDependencies () {
   const pkg = readJson('package.json')
+  if (pkg === null) return
   for (const field of ['dependencies', 'devDependencies', 'overrides']) {
-    for (const [name, range] of Object.entries(pkg[field] ?? {})) {
-      if (typeof range !== 'string') continue
-      if (!EXACT_VERSION.test(range)) {
-        errors.push(
-          `package.json: ${field}."${name}" is "${range}"; dependencies are ` +
-            'pinned to an exact version, never a range',
-        )
-      }
-    }
+    checkVersionTree(field, pkg[field], '')
   }
 }
 

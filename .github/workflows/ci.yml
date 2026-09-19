@@ -46,6 +46,11 @@ jobs:
       - name: Parse every Gherkin example
         run: npm run validate:gherkin
 
+      # The runner has both bash and pwsh, so this exercises both halves of
+      # each script pair and compares what they print.
+      - name: Exercise the installer scripts
+        run: npm run test:scripts
+
       - name: Confirm research notes are untracked
         run: |
           if git ls-files --error-unmatch SOURCES.md 2>/dev/null; then
