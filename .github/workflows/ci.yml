@@ -13,7 +13,7 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       # .node-version is the one place the version is written. mise reads it
       # too, so a local `mise install` and this job cannot drift apart.
