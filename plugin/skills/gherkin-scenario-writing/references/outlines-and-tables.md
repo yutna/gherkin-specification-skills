@@ -235,7 +235,7 @@ When the branch submits:
 Then the title is added to the catalogue
 ```
 
-The indentation of the closing delimiter sets the left margin. Everything
+The indentation of the opening delimiter sets the left margin. Everything
 is de-indented by that amount, so the block can sit visually inside the
 step without leading spaces reaching the step definition.
 

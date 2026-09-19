@@ -209,7 +209,7 @@ property cleanup needs.
 The standalone runner exposes them on the context:
 
 ```python
-@given('the catalogue contains')
+@given('the catalogue contains:')
 def step_catalogue(context):
     for row in context.table:
         context.build.title(row["title"], row["branch"], int(row["copies"]))

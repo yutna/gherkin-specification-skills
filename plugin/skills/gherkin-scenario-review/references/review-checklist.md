@@ -19,9 +19,9 @@ when a whole suite needs work and there is no time to fix all of it.
 ## Using the checklist
 
 Read down the list once per file. Anything answered no is a candidate
-finding, not an automatic one; the remedy column says whether it is worth
-raising. A review of more than three or four findings will be skimmed, so
-rank ruthlessly before writing anything.
+finding, not an automatic one; the remedy attached to each entry says
+whether it is worth raising. A review of more than three or four findings
+will be skimmed, so rank ruthlessly before writing anything.
 
 ## Structure and coverage
 

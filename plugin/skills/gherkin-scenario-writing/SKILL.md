@@ -207,9 +207,9 @@ content type.
 
 ```gherkin
 Given the catalogue contains:
-  | title               | branch  | copies |
-  | The Dispossessed    | Sathorn | 2      |
-  | A Wizard of Earthsea| Phaya   | 1      |
+  | title                | branch  | copies |
+  | The Dispossessed     | Sathorn | 2      |
+  | A Wizard of Earthsea | Phaya   | 1      |
 When a member searches for "Earthsea"
 Then 1 result is returned
 ```
@@ -247,7 +247,7 @@ that file. Everything else works the same way.
 # language: th
 ความสามารถ: การยืมหนังสือ
 
-  สถานการณ์: ยืมได้เมื่อไม่มีรายการค้างส่ง
+  เหตุการณ์: ยืมได้เมื่อไม่มีรายการค้างส่ง
     กำหนดให้ สมาชิกไม่มีรายการค้างส่ง
     เมื่อ สมาชิกยืมหนังสือหนึ่งเล่ม
     ดังนั้น ระบบบันทึกการยืมสำเร็จ
