@@ -12,9 +12,9 @@ npm install
 npm test
 ```
 
-Node 24, and nothing else. `mise.toml` pins the exact version, so
-`mise install` sets it up. Continuous integration reads that same file,
-so a green build locally means a green build there.
+Node 24, and nothing else. `.node-version` pins the exact version;
+`mise install` sets it up, and continuous integration reads the same
+file, so a green build locally means a green build there.
 
 To load the skills in an agent while you work on them:
 
