@@ -2,16 +2,19 @@
 
 ## What this repository contains
 
-Markdown skill files, two Node validation scripts, and two shell scripts
-that install or link them. The skills themselves are documentation: they
-are read by an agent and contain no executable content.
+Markdown skill files, three Node scripts that check them, and two pairs
+of installer scripts, one shell and one PowerShell. The skills themselves
+are documentation: they are read by an agent and contain no executable
+content.
 
 The parts that do run on a contributor's machine are:
 
-- `scripts/install.sh` and `scripts/link-local.sh`, which copy and link
-  directories under the home directory.
+- `scripts/install.sh` and `scripts/install.ps1`, which copy directories
+  under the home directory, and `scripts/link-local.sh` and
+  `scripts/link-local.ps1`, which link them inside the checkout.
 - `scripts/validate-skills.mjs` and `scripts/validate-gherkin.mjs`, which
-  read files in the repository.
+  read files in the repository, and `scripts/test-scripts.mjs`, which
+  runs the four installer scripts against a temporary copy of it.
 - The development dependencies installed by `npm ci`.
 
 ## Supported versions
