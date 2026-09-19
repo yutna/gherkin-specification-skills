@@ -35,17 +35,17 @@ be consistent: two spaces per level is the common convention.
 
 ## Primary keywords
 
-| Keyword            | Purpose                                  |
-| ------------------ | ---------------------------------------- |
-| `Feature`          | Names the capability; opens the file     |
-| `Rule`             | Groups examples of one business rule     |
-| `Background`       | Shared setup, re-run before each example |
-| `Scenario`         | One concrete example                     |
-| `Example`          | Synonym for `Scenario`                   |
-| `Scenario Outline` | A template driven by `Examples` rows     |
-| `Scenario Template`| Synonym for `Scenario Outline`           |
-| `Examples`         | The rows that fill an outline            |
-| `Scenarios`        | Synonym for `Examples`                   |
+| Keyword             | Purpose                                  |
+| ------------------- | ---------------------------------------- |
+| `Feature`           | Names the capability; opens the file     |
+| `Rule`              | Groups examples of one business rule     |
+| `Background`        | Shared setup, re-run before each example |
+| `Scenario`          | One concrete example                     |
+| `Example`           | Synonym for `Scenario`                   |
+| `Scenario Outline`  | A template driven by `Examples` rows     |
+| `Scenario Template` | Synonym for `Scenario Outline`           |
+| `Examples`          | The rows that fill an outline            |
+| `Scenarios`         | Synonym for `Examples`                   |
 
 ## Step keywords
 
