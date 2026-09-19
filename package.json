@@ -27,7 +27,8 @@
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#SOURCES.md\" \"#.claude\"",
     "validate:skills": "node scripts/validate-skills.mjs",
     "validate:gherkin": "node scripts/validate-gherkin.mjs",
-    "test": "npm run lint:md && npm run validate:skills && npm run validate:gherkin"
+    "test:scripts": "node scripts/test-scripts.mjs",
+    "test": "npm run lint:md && npm run validate:skills && npm run validate:gherkin && npm run test:scripts"
   },
   "devDependencies": {
     "@cucumber/gherkin": "42.0.1",
