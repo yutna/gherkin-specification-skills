@@ -10,7 +10,7 @@
     {
       "name": "gherkin-specification-skills",
       "description": "Discover examples, write and review Gherkin, automate steps, and design a specification suite",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "source": "./plugin",
       "author": {
         "name": "Yutthana Siphuengchai"
