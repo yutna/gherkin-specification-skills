@@ -125,7 +125,7 @@ plugin/skills/<name>/references/   detail loaded on demand
 plugin/.claude-plugin/             the plugin manifest
 .claude-plugin/marketplace.json    the marketplace manifest
 scripts/                           installer and validators
-mise.toml                          the Node version, read by CI as well
+.node-version                      the Node version, read by CI as well
 ```
 
 Everything the plugin ships lives under `plugin/`. The repository's own
