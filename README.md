@@ -100,7 +100,7 @@ npm install
 npm test
 ```
 
-`npm test` runs three checks:
+`npm test` runs four checks:
 
 - `markdownlint-cli2` over every Markdown file, with **default rules
   only**. There is no configuration file and no inline rule suppression
@@ -114,9 +114,16 @@ npm test
   `when_to_use`, `license: MIT`, no key outside the documented set, and a
   `metadata.version` matching `package.json`.
 - `scripts/validate-gherkin.mjs`, which extracts every fenced `gherkin`
-  block in the repository and parses it with a real Gherkin parser. Every
-  published example is therefore valid Gherkin, including the deliberately
-  poor ones in the review skill.
+  block in the repository and parses it with a real Gherkin parser. A
+  fragment is wrapped in a synthesised `Feature` first, so a few bare
+  steps are fine, but the parse has to recognise Gherkin rather than sweep
+  the snippet into a description, which is what a mistyped keyword leaves
+  behind. The deliberately poor examples in the review skill are valid
+  syntax and need no exemption.
+- `scripts/test-scripts.mjs`, which runs the four installer scripts
+  against a throwaway copy of the repository, checking what they write,
+  print, and exit with, and comparing the shell and PowerShell versions
+  against each other. A shell that is not installed is skipped.
 
 To work on the skills with an agent inside this repository:
 
@@ -128,7 +135,8 @@ On Windows, `.\scripts\link-local.ps1`, which makes directory junctions
 and so needs neither administrator rights nor developer mode.
 
 Either links `plugin/skills/` into `.claude/skills/`, which is
-gitignored. Undo it with `--remove`, or `-Remove` in PowerShell.
+gitignored, and clears any link whose skill has since been renamed or
+removed. Undo it with `--remove`, or `-Remove` in PowerShell.
 
 ## Repository layout
 
@@ -137,7 +145,7 @@ plugin/skills/<name>/SKILL.md      the skill, and the single source of truth
 plugin/skills/<name>/references/   detail loaded on demand
 plugin/.claude-plugin/             the plugin manifest
 .claude-plugin/marketplace.json    the marketplace manifest
-scripts/                           installers and validators
+scripts/                           installers, validators, and their test
 .node-version                      the Node version, read by CI as well
 ```
 

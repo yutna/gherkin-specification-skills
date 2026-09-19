@@ -28,7 +28,7 @@ commit as the change to the other.
 
 ## The checks
 
-`npm test` runs three things, and all three must pass.
+`npm test` runs four things, and all four must pass.
 
 **Markdown linting** uses `markdownlint-cli2` with default rules. The
 repository has no configuration file and no inline suppression comments,
@@ -46,7 +46,16 @@ either a typo or a feature this runtime does not have.
 
 **Gherkin validation** extracts every fenced `gherkin` block in the
 repository and parses it. Fragments are wrapped automatically, so a few
-bare steps are fine, but anything that would not parse fails the build.
+bare steps are fine, but the parse has to find Gherkin in the snippet: a
+`Feature` description swallows any text put under it, so a block that
+parses only as description text fails the build. A mistyped keyword is
+the usual cause.
+
+**Script checks** run the four installer scripts against a throwaway copy
+of the repository with its own `HOME`, and compare what the shell and
+PowerShell versions print, so the two halves of each pair cannot drift
+apart. A shell that is not installed is skipped rather than failed, so
+this passes on a machine with only one of them.
 
 Continuous integration installs with `npm ci`, which refuses to run when
 `package.json` and `package-lock.json` disagree. So a change to any
