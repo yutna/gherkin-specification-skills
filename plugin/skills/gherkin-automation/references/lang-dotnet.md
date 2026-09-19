@@ -133,18 +133,35 @@ for a different environment.
 [Binding]
 public class ParameterTypes
 {
-    [StepArgumentTransformation(@"Priya|Marcus|Ana")]
+    [StepArgumentTransformation(@"(Priya|Marcus|Ana)", Name = "member")]
     public Member ToMember(string name) => Member.Named(name);
 
-    [StepArgumentTransformation(@"recorded|refused")]
+    [StepArgumentTransformation(@"(recorded|refused)", Name = "outcome")]
     public Outcome ToOutcome(string word) =>
         Enum.Parse<Outcome>(word, ignoreCase: true);
 }
 ```
 
-A transformation with no pattern applies to any argument of that type,
-which is a compact way to convert every date or money value in the suite
-in one place.
+Two details decide whether this works, and both fail in ways that do not
+say what is wrong.
+
+The pattern needs its capturing group. The groups are what the method
+receives, so `@"Priya|Marcus|Ana"` captures nothing and calls a
+one-argument method with no arguments, reported as a parameter count
+mismatch rather than as a pattern problem.
+
+`Name` is what makes the transformation reachable from a Cucumber
+Expression. It is the name in the braces, so `Name = "member"` is what
+lets a step read `{member}`; without it the expression fails with an
+undefined parameter type, and the type's own name does not stand in for
+it. One unnamed transformation is enough to fail every step in the run,
+so the message may name a step that is not the one at fault.
+
+A transformation with no pattern still applies to any argument of that
+type in a regular-expression step, which is a compact way to convert
+every date or money value in the suite in one place. A Cucumber
+Expression cannot use it: with nothing to match, there is no parameter
+type to name.
 
 ## Hooks
 
@@ -230,11 +247,23 @@ parallelism almost always come from the glue or the application.
 
 ## Living documentation
 
-LivingDoc turns executed scenarios into a browsable specification,
-including coverage of which rules have scenarios and which do not. It
-reads the same feature files plus the run results, so it costs nothing
-beyond wiring it into the build. Where to publish the output, and how to
-keep it read, belongs to the `gherkin-suite-design` skill.
+Reqnroll carries the Cucumber HTML formatter as a dependency, so a
+browsable specification is a configuration entry rather than an install:
+
+```json
+{
+  "formatters": {
+    "html": { "outputFilePath": "living-doc.html" }
+  }
+}
+```
+
+The file lands beside the test assembly and holds the scenarios as
+written with the result of each. LivingDoc, the tool most .NET teams
+know, belongs to SpecFlow and its plugin is tied to that discontinued
+line; on Reqnroll the choices are this formatter or a third-party plugin.
+Where to publish whatever is produced, and how to keep it read, belongs
+to the `gherkin-suite-design` skill.
 
 ## Pitfalls
 
