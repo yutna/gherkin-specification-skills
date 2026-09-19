@@ -73,8 +73,11 @@ for src in "$SKILLS_SRC"/*/; do
   installed=$((installed + 1))
 done
 
-printf '\n%d skill(s) installed, %d skipped\n' "$installed" "$skipped"
-
-if [ "$installed" -gt 0 ] && [ "$dry_run" -eq 0 ]; then
-  printf 'Start a new session for the skills to be discovered.\n'
+if [ "$dry_run" -eq 1 ]; then
+  printf '\n%d skill(s) would be installed, %d skipped\n' "$installed" "$skipped"
+else
+  printf '\n%d skill(s) installed, %d skipped\n' "$installed" "$skipped"
+  if [ "$installed" -gt 0 ]; then
+    printf 'Start a new session for the skills to be discovered.\n'
+  fi
 fi

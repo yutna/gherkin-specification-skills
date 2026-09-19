@@ -14,22 +14,39 @@ SKILLS_SRC="${REPO_ROOT}/plugin/skills"
 
 CLAUDE_DIR="${REPO_ROOT}/.claude/skills"
 
-if [ "${1:-}" = "--remove" ]; then
+usage() {
+  cat <<'USAGE'
+Usage: scripts/link-local.sh [options]
+
+Links plugin/skills/<name> into .claude/skills so an agent working in
+this repository picks them up without installing anything.
+
+Options:
+  --remove        Delete the links again
+  -h, --help      Show this message
+USAGE
+}
+
+remove=0
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --remove)      remove=1 ;;
+    -h|--help)     usage; exit 0 ;;
+    *) printf 'Unknown option: %s\n\n' "$1" >&2; usage >&2; exit 2 ;;
+  esac
+  shift
+done
+
+if [ "$remove" -eq 1 ]; then
   rm -rf "$CLAUDE_DIR"
   printf 'removed local skill links\n'
   exit 0
 fi
 
-if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
-  cat <<'USAGE'
-Usage: scripts/link-local.sh [--remove]
-
-Links plugin/skills/<name> into .claude/skills so an agent working in
-this repository picks them up without installing anything.
-
-  --remove   Delete the links again
-USAGE
-  exit 0
+if [ ! -d "$SKILLS_SRC" ]; then
+  printf 'error: %s not found\n' "$SKILLS_SRC" >&2
+  exit 1
 fi
 
 mkdir -p "$CLAUDE_DIR"
@@ -49,4 +66,17 @@ for src in "$SKILLS_SRC"/*/; do
   count=$((count + 1))
 done
 
-printf '\n%d skill(s) linked into .claude/skills\n' "$count"
+# A skill that was renamed or deleted leaves a link behind that points at
+# nothing. Claude Code keeps scanning the directory, so clear the dead ones
+# rather than emptying the directory, which may hold links this script did
+# not make.
+pruned=0
+for link in "$CLAUDE_DIR"/*; do
+  if [ ! -L "$link" ]; then continue; fi
+  if [ -e "$link" ]; then continue; fi
+  rm -f "$link"
+  printf 'pruned %s (no longer a skill)\n' "$(basename "$link")"
+  pruned=$((pruned + 1))
+done
+
+printf '\n%d skill(s) linked into .claude/skills, %d pruned\n' "$count" "$pruned"
