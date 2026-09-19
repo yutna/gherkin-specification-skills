@@ -1,0 +1,9 @@
+# Development toolchain for this repository.
+#
+# Node is the only thing needed: the two validation scripts run on it, and
+# markdownlint-cli2 comes from npm. Continuous integration tests both this
+# version and the floor declared in package.json's "engines", so a change
+# here should be reflected in the matrix in .github/workflows/ci.yml.
+
+[tools]
+node = "24"

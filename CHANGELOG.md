@@ -8,6 +8,13 @@ runs.
 
 This project adheres to semantic versioning.
 
+## Unreleased
+
+- Added: `mise.toml`, pinning the Node version this is developed on.
+- Changed: continuous integration now runs the checks on Node 20 and 24.
+  20 is the floor `package.json` declares and was the only version
+  tested; 24 is what `mise.toml` pins, so both are now verified.
+
 ## 2.0.1
 
 Released 2026-09-18.
