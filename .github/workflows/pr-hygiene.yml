@@ -3,9 +3,20 @@ name: PR hygiene
 # pull_request_target so the token can write on pull requests from forks.
 # This workflow never checks out the pull request's code, which is what makes
 # that safe: it only reads and writes through the API.
+#
+# synchronize is in the list because branch protection requires the labels
+# check against the head commit: without it, the first push after opening
+# leaves a pull request permanently unmergeable until someone toggles a
+# label by hand.
 on:
   pull_request_target:
-    types: [opened, reopened, ready_for_review, labeled, unlabeled]
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - labeled
+      - unlabeled
+      - synchronize
 
 permissions:
   pull-requests: write
