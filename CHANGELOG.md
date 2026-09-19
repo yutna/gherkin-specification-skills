@@ -10,6 +10,11 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
+- Fixed: a denial-of-service advisory in `smol-toml`, reached through
+  `markdownlint-cli2`. npm's only suggested fix was to downgrade
+  `markdownlint-cli2` by a major version, so the transitive dependency is
+  pinned with an `overrides` entry instead. Remove it once upstream ships
+  the patched version.
 - Added: `mise.toml`, pinning the Node version this is developed on.
 - Changed: continuous integration now runs the checks on Node 20 and 24.
   20 is the floor `package.json` declares and was the only version
