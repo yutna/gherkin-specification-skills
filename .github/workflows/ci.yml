@@ -12,18 +12,14 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        # 20 is the floor declared in package.json "engines"; 24 is what
-        # mise.toml pins for local development. Both must pass.
-        node-version: [20, 24]
     steps:
       - uses: actions/checkout@v4
 
+      # mise.toml is the one place the Node version is written; setup-node
+      # reads it directly, so CI cannot drift from a local `mise install`.
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: mise.toml
           cache: npm
 
       - name: Install dependencies

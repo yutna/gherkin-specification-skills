@@ -15,10 +15,12 @@ This project adheres to semantic versioning.
   `markdownlint-cli2` by a major version, so the transitive dependency is
   pinned with an `overrides` entry instead. Remove it once upstream ships
   the patched version.
-- Added: `mise.toml`, pinning the Node version this is developed on.
-- Changed: continuous integration now runs the checks on Node 20 and 24.
-  20 is the floor `package.json` declares and was the only version
-  tested; 24 is what `mise.toml` pins, so both are now verified.
+- Added: `mise.toml`, pinning Node to an exact version.
+  `.github/workflows/ci.yml` reads it through `actions/setup-node`, so the
+  version is written in one place and continuous integration cannot drift
+  from a local `mise install`.
+- Changed: the project now requires Node 24. `package.json` previously
+  declared `>=20`, which nothing verified once development moved to 24.
 
 ## 2.0.1
 
