@@ -13,9 +13,10 @@ current guidance got wrong.
 
 Two are required, and a check enforces them:
 
-- One type: `feature`, `release`, `bug`, `hotfix`, `chore`, or
+- At least one type: `feature`, `release`, `bug`, `hotfix`, `chore`, or
   `documentation`.
-- One priority: `priority: high`, `priority: medium`, or `priority: low`.
+- Exactly one priority: `priority: high`, `priority: medium`, or
+  `priority: low`.
 
 Anything else is optional. `breaking-change`, `security`, and `skill` are
 worth reaching for when they apply.
