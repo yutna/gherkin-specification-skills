@@ -8,6 +8,74 @@ runs.
 
 This project adheres to semantic versioning.
 
+## 2.1.1
+
+Released 2026-09-19.
+
+Fixes and hardening only, which is why it is a patch. Unlike 2.1.0, this
+one does change what the skills say: five errors in the published
+examples are corrected, so an installed copy is worth refreshing with
+`./scripts/install.sh --force`, or `-Force` in PowerShell.
+
+- Fixed: the Thai localisation example in `gherkin-scenario-writing` used
+  a scenario keyword no Gherkin dialect defines, so the whole scenario
+  was read as description text rather than as a scenario.
+- Fixed: the behave data-table example bound the step without the
+  trailing colon that every feature file in these skills writes. behave
+  matches the step text exactly, so the step was undefined. The other
+  five language files were already right.
+- Fixed: `outlines-and-tables.md` said the indentation of a doc string's
+  closing delimiter sets the left margin. It is the opening delimiter;
+  the closing one has no effect at all.
+- Fixed: `review-checklist.md` pointed at a remedy column in a list that
+  has no columns, left over from a table the line-length rule does not
+  allow.
+- Fixed: the .NET custom parameter type example could not have run. Its
+  transformation patterns had no capturing group, so the method was
+  called with no arguments, and they had no `Name`, without which a
+  Cucumber Expression cannot reach them. Checked against Reqnroll 3.3.4.
+- Changed: the .NET living documentation section pointed at LivingDoc,
+  which belongs to the discontinued SpecFlow line. Reqnroll carries the
+  Cucumber HTML formatter as a dependency, so the section now shows the
+  `reqnroll.json` entry that turns it on.
+- Fixed: the Gherkin validator accepted any snippet a synthesised
+  `Feature` could swallow as description text, which is how the first two
+  errors above survived. Thirty-three of the eighty-two published blocks
+  were being accepted that way. A wrapped snippet must now produce a
+  child or a step and leave no description behind, and the wrapper is
+  built from the snippet's own dialect rather than always from English.
+- Fixed: both installers reported `N skill(s) installed` after a dry run
+  that copied nothing.
+- Fixed: `link-local.sh` accepted any argument, so a mistyped `--remov`
+  linked instead of removing. It now parses options as `install.sh` does,
+  and both `link-local` scripts report a missing `plugin/skills` in the
+  same words rather than one printing nothing and the other throwing.
+- Fixed: the frontmatter validator threw a stack trace on a missing or
+  malformed manifest, and its exact-version check skipped a range nested
+  inside an `overrides` entry.
+- Added: both `link-local` scripts clear links whose skill has since been
+  renamed or deleted, instead of leaving them pointing at nothing.
+- Added: `scripts/test-scripts.mjs`, a fourth check in `npm test`. It
+  runs all four installer scripts against a throwaway copy of the
+  repository and compares what the shell and PowerShell versions print,
+  so the pair cannot drift apart unnoticed. A shell that is not installed
+  is skipped, so it passes on a machine with only one of them.
+- Fixed: `SECURITY.md` named only the shell installers among the parts
+  that run on a contributor's machine. The PowerShell pair has been there
+  since 2.1.0.
+- Fixed: the pull request label check did not re-run when a pull request
+  was pushed to, so the first push after opening left it unmergeable,
+  with branch protection waiting for a check that would only come back if
+  someone toggled a label by hand.
+- Changed: continuous integration cancels a pull request run that a later
+  push has superseded. Runs on main are left alone, so every commit there
+  keeps a status of its own.
+- Changed: `CONTRIBUTING.md` and the pull request template said one type
+  label where the check requires at least one, and one priority label
+  where it requires exactly one. More than one type is deliberate: a
+  release that also carries a fix is two honest labels.
+- Changed: `actions/checkout` to v7 and `actions/github-script` to v9.
+
 ## 2.1.0
 
 Released 2026-09-19.
