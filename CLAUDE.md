@@ -26,10 +26,10 @@ one applies.
 npm test
 ```
 
-That runs Markdown linting, skill frontmatter validation, and Gherkin
-parsing. All three must pass. Run them as you write, not once at the end;
-the line-length rule in particular is easier to satisfy while drafting
-than to retrofit.
+That runs Markdown linting, skill frontmatter validation, Gherkin
+parsing, and the installer scripts. All four must pass. Run them as you
+write, not once at the end; the line-length rule in particular is easier
+to satisfy while drafting than to retrofit.
 
 `npm test` does not check the lock file, but continuous integration
 installs with `npm ci`, which fails when `package.json` and
@@ -59,7 +59,8 @@ These are not preferences, and a change that breaks one will be rejected.
   names, or bibliographic references to any tracked file.
 - **Every fenced `gherkin` block must parse.** The validator wraps
   fragments automatically, so a snippet of bare steps is fine, but broken
-  syntax fails the build.
+  syntax fails the build, and so does a snippet that parses only because
+  a `Feature` description swallowed it.
 
 ## Writing rules that follow from the linter
 
@@ -117,6 +118,8 @@ place the repository deliberately keeps two implementations of the same
 thing, because a Windows user may have neither a shell nor WSL. Change
 one and change the other in the same commit, and keep their output
 wording identical so a bug report reads the same from either.
+`scripts/test-scripts.mjs` runs all four and compares the lines carrying
+the counts, so a divergence fails `npm test` where both shells exist.
 
 ## Working locally
 
