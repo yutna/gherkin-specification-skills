@@ -45,14 +45,6 @@ if [ ! -d "$SKILLS_SRC" ]; then
   exit 1
 fi
 
-run() {
-  if [ "$dry_run" -eq 1 ]; then
-    printf 'would: %s\n' "$*"
-  else
-    "$@"
-  fi
-}
-
 installed=0
 skipped=0
 
@@ -67,12 +59,16 @@ for src in "$SKILLS_SRC"/*/; do
     continue
   fi
 
-  run mkdir -p "$CLAUDE_DIR"
-  if [ -e "$dest" ] || [ -L "$dest" ]; then
-    run rm -rf "$dest"
+  if [ "$dry_run" -eq 1 ]; then
+    printf 'would   copy %s -> %s\n' "$name" "$dest"
+  else
+    mkdir -p "$CLAUDE_DIR"
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+      rm -rf "$dest"
+    fi
+    cp -R "$src" "$dest"
+    printf 'copied %s -> %s\n' "$name" "$dest"
   fi
-  run cp -R "$src" "$dest"
-  printf 'copied %s -> %s\n' "$name" "$dest"
 
   installed=$((installed + 1))
 done

@@ -50,6 +50,11 @@ These are not preferences, and a change that breaks one will be rejected.
   hard validation error, because it is either a typo or a feature this
   runtime does not have.
 - **Skill content is English only.**
+- **Dependencies are pinned to an exact version, never a range.** A caret
+  range lets a patch release change what `markdownlint` reports, and this
+  repository forbids lint configuration, so the build can turn red with no
+  content change. `.npmrc` sets `save-exact`; `npm test` fails on a range
+  that was added by hand.
 - **No citations.** Do not add book titles, author names, publisher
   names, or bibliographic references to any tracked file.
 - **Every fenced `gherkin` block must parse.** The validator wraps
@@ -104,6 +109,15 @@ The manifest needs no change. `plugin/.claude-plugin/plugin.json` declares
 listed anywhere. The version in its frontmatter must match
 `package.json`; `npm test` fails if it does not.
 
+## The two script pairs
+
+`scripts/install.sh` and `scripts/install.ps1` do the same job, as do
+`scripts/link-local.sh` and `scripts/link-local.ps1`. This is the one
+place the repository deliberately keeps two implementations of the same
+thing, because a Windows user may have neither a shell nor WSL. Change
+one and change the other in the same commit, and keep their output
+wording identical so a bug report reads the same from either.
+
 ## Working locally
 
 ```bash
@@ -112,7 +126,8 @@ listed anywhere. The version in its frontmatter must match
 
 This links `plugin/skills/` into `.claude/skills/` so an agent working in
 this repository can load them. That directory is gitignored. Remove the
-links with `./scripts/link-local.sh --remove`.
+links with `./scripts/link-local.sh --remove`. On Windows the equivalent
+is `.\scripts\link-local.ps1`, with `-Remove`.
 
 ## Files you should not create
 

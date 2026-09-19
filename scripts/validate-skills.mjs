@@ -311,6 +311,26 @@ function validateNoPackageFilesInPlugin () {
   }
 }
 
+// A range lets a patch release change what markdownlint reports, and this
+// repository forbids lint configuration, so the build can turn red with no
+// content change. .npmrc sets save-exact; this catches a hand-edited range.
+const EXACT_VERSION = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/
+
+function validateExactDependencies () {
+  const pkg = readJson('package.json')
+  for (const field of ['dependencies', 'devDependencies', 'overrides']) {
+    for (const [name, range] of Object.entries(pkg[field] ?? {})) {
+      if (typeof range !== 'string') continue
+      if (!EXACT_VERSION.test(range)) {
+        errors.push(
+          `package.json: ${field}."${name}" is "${range}"; dependencies are ` +
+            'pinned to an exact version, never a range',
+        )
+      }
+    }
+  }
+}
+
 function validateDistinctDescriptions (ids) {
   const seen = new Map()
   for (const id of ids) {
@@ -334,6 +354,7 @@ for (const id of skillIds) {
 }
 validateManifestVersions()
 validateNoPackageFilesInPlugin()
+validateExactDependencies()
 if (errors.length === 0) {
   validateDistinctDescriptions(skillIds)
 }

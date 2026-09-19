@@ -6,6 +6,7 @@
 # Files that must keep LF even on Windows, because they are executed.
 *.sh text eol=lf
 *.mjs text eol=lf
+*.ps1 text eol=lf
 
 # Gherkin feature files are text.
 *.feature text
