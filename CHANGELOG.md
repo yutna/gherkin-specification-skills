@@ -1,5 +1,9 @@
 # Changelog
 
+Release notes for v2.2.0 and later are on
+[GitHub Releases](https://github.com/yutna/gherkin-specification-skills/releases).
+The entries below record earlier versions.
+
 All notable changes to this project are recorded here. The format follows
 the common keep-a-changelog conventions, with one difference: entries are
 written as labelled bullets rather than as repeated subheadings, because

@@ -66,3 +66,14 @@ jobs:
           fi
           git check-ignore -q SOURCES.md
           echo "SOURCES.md is gitignored and untracked."
+
+  # ci-ok is the one required check: add every job above to its needs.
+  ci-ok:
+    if: always()
+    needs: [verify]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All required jobs passed
+        env:
+          FAILED: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: test "$FAILED" = false

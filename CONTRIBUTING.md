@@ -129,21 +129,28 @@ Its `metadata.version` must match `package.json`, or `npm test` fails.
 
 ## Pull requests
 
-- Every pull request needs at least one type label — `feature`,
-  `release`, `bug`, `hotfix`, `chore`, or `documentation` — and exactly
-  one priority label. A check enforces both, so a pull request without
-  them cannot merge. More than one type is allowed, because a release
-  that also carries a fix is two honest labels; more than one priority is
-  not, because priority is a single ordering. Other labels, such as
-  `breaking-change`, `security`, and `skill`, are optional and worth
-  using when they fit.
-- One subject per pull request. A wording fix and a new skill are two
-  changes.
-- Say which skill you changed and why in the description.
-- Run `npm test` before opening it. Continuous integration runs the same
-  checks, so a red build means the local run was skipped.
-- Corrections based on real experience are more valuable than additions.
-  If something in here is wrong, say what you observed instead.
+Every change reaches `main` through a pull request. Its title must be in
+[Conventional Commits](https://www.conventionalcommits.org/) form, for
+example `feat: add a scenario-review skill`. Open it as a draft, link
+the issue with `Closes #N`, and keep it in a version milestone.
+`pr-check` assigns the author, sets the kind label from the title, and
+fails unless the title, assignee and milestone are right. `ci-ok` is the
+other required check. Squash merge only; the branch is deleted.
+
+One subject per pull request. A wording fix and a new skill are two
+changes. Say which skill you changed and why in the description. Run
+`npm test` before opening it. Corrections based on real experience are
+more valuable than additions; if something here is wrong, say what you
+observed instead.
+
+## Releases
+
+A release is made when its version milestone is complete: closing the
+milestone creates the GitHub Release with generated notes. Merge the
+version bump first; the release preflight refuses a milestone whose
+version does not match `package.json`. Release notes from v2.2.0 onward
+are on GitHub Releases, and `CHANGELOG.md` records the versions before
+that.
 
 ## Reporting a problem
 
